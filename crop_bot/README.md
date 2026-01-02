@@ -1,6 +1,6 @@
 # IC2 Crops Robot (Croppy)
 This dir contains various scripts for automating a robot to perform various procedures on IC2 crops:
-- setup.lua: fetches all of the crop_bot code to the current dir.
+- setup.lua: fetches all of the crop_bot code and common robot libraries to the current dir.
   - WARNING: overwrites any existing files.
 - .shrc: gets run on boot, mostly used for convenience stuff.
 - test.lua: convenience script to make testing and debugging easier.
