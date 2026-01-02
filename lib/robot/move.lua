@@ -60,7 +60,7 @@ function move.face_dir(dir_new)
   BOT[move.TURNS[dir_curr..dir_new]]()
 end
 
-function move.move_function(dist_new)
+function move.move_func_plane(dist_new)
   local dir_curr = NAV.getFacing()
 
   if dist_new > 0 and (dir_curr == move.FACINGS["N"] or dir_curr == move.FACINGS["E"]) then
@@ -72,33 +72,51 @@ function move.move_function(dist_new)
   return BOT.back
 end
 
-function move.move_dist(dist_new)
-  local move_func = move.move_function(dist_new)
-  for _=1,math.abs(dist_new) do
+function move.move_func_relative(dist)
+  if dist > 0 then
+    return BOT.forward
+  end
+
+  return BOT.back
+end
+
+function move.travel(dist, move_func)
+  for _=1,math.abs(dist) do
     move_func()
   end
 end
 
-function move.travel_pos(curr_pos, new_pos)
-  local dist_y = new_pos[1] - curr_pos[1]
-  local dist_x = new_pos[2] - curr_pos[2]
+function move.travel_plane(dist_plane)
+  local move_func = move.move_func_plane(dist_plane)
+  move.travel(dist_plane, move_func)
+end
 
-  if facing_x() then
-    move.move_dist(dist_x)
-    move.face_dir("N")
-    move.move_dist(dist_y)
-  end
+function move.travel_relative(dist_rel)
+  local move_func = move.move_func_relative(dist_rel)
+  move.travel(dist_rel, move_func)
+end
+
+function move.travel_pos(curr_pos, new_pos)
+  local dist_x = new_pos[1] - curr_pos[1]
+  local dist_y = new_pos[2] - curr_pos[2]
+
   if facing_y() then
-    move.move_dist(dist_y)
+    move.travel_plane(dist_y)
     move.face_dir("E")
-    move.move_dist(dist_x)
+    move.travel_plane(dist_x)
+  elseif facing_x() then
+    move.travel_plane(dist_x)
+    move.face_dir("N")
+    move.travel_plane(dist_y)
   end
 end
 
 function move.travel_dir(dir, dist)
   move.face_dir(dir)
-  move.move_dist(dist)
+  move.travel_relative(dist)
 end
+
+
 
 return move
 
