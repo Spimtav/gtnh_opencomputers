@@ -73,7 +73,7 @@ end
 
 function move_dist(dist_new)
   local move_func = move_function(dist_new)
-  for _=1,dist_new do
+  for _=1,math.abs(dist_new) do
     move_func()
   end
 end
