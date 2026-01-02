@@ -116,6 +116,24 @@ function move.travel_dir(dir, dist)
   move.travel_relative(dist)
 end
 
+function move.travel_forward(dist)
+  move.travel(dist, BOT.forward)
+end
+
+function move.travel_back(dist)
+  move.travel(dist, BOT.back)
+end
+
+function move.travel_left(dist)
+  BOT.turnLeft()
+  move.travel(dist, BOT.forward)
+end
+
+function move.travel_right(dist)
+  BOT.turnRight()
+  move.travel(dist, BOT.forward)
+end
+
 
 
 return move
