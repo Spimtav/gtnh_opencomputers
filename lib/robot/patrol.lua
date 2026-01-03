@@ -14,10 +14,7 @@ package.loaded.move = nil
 local BOT = require("robot")
 local MOVE = require("move")
 
-patrol.PATROL_LENGTH = 3
-patrol.PATROL_WIDTH = 3
 patrol.POS_START = {0, 0}
-
 patrol.POS_CURR = {0, 0}
 
 
@@ -73,26 +70,24 @@ function patrol.print_pos()
 end
 
 
-function patrol.patrol(bot_func)
+function patrol.patrol(bot_func, patrol_length, patrol_width)
   patrol.reset_pos()
   
   local func_calls = 0
-  for rounds=1,2 do
-    for y=0,(patrol.PATROL_LENGTH-1) do
-      patrol.travel_y(y)
-      patrol.face_inward_x(y)
+  for y=0,(patrol_length-1) do
+    patrol.travel_y(y)
+    patrol.face_inward_x(y)
  
-      for x=0,(patrol.PATROL_WIDTH-1) do
-        patrol.travel_x(x, y)
+    for x=0,(patrol_width-1) do
+      patrol.travel_x(x, y)
 
-        bot_func()
-        func_calls = func_calls + 1
-        print("Func calls: "..func_calls)
-      end
+      bot_func()
+      func_calls = func_calls + 1
+      print("Func calls: "..func_calls)
     end
-  
-    patrol.travel_start()
   end
+
+  patrol.travel_start()
 end
 
 return patrol

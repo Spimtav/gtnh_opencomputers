@@ -23,7 +23,7 @@ package.loaded.move = nil
 package.loaded.patrol = nil
 
 BOT = require("robot")
-GEO = component.geolyzer
+GEO = require("component").geolyzer
 MOVE = require("move")
 PATROL = require("patrol")
 
@@ -36,8 +36,8 @@ local CHILD_CROPS = {}
 
 
 function pos_str()
-  local x = MOVE.POS_CURR[1]
-  local y = MOVE.POS_CURR[2]
+  local x = PATROL.POS_CURR[1]
+  local y = PATROL.POS_CURR[2]
 
   return x..","..y
 end
@@ -52,8 +52,8 @@ function crop_stat_str(stat_table)
 end
 
 function odd_pos()
-  local x = MOVE.POS_CURR[1]
-  local y = MOVE.POS_CURR[2]
+  local x = PATROL.POS_CURR[1]
+  local y = PATROL.POS_CURR[2]
 
   return (x+y % 2) == 1
 end
@@ -77,7 +77,7 @@ end
 
 
 function main()
-  patrol(cultivate)
+  PATROL.patrol(cultivate, 2, 2)
 
   print_crop_table(PARENT_CROPS)
   print_crop_table(CHILD_CROPS)
