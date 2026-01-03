@@ -5,7 +5,7 @@ local files = {
   cropbot_url.."test.lua",
   cropbot_url.."README.md",
   cropbot_url.."setup.lua",
-  cropbot_url.."patrol.lua",
+  robot_lib_url.."patrol.lua",
   robot_lib_url.."move.lua"
 }
 
