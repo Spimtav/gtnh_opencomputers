@@ -46,7 +46,7 @@ for rounds=1,2 do
       BOT.forward()
       if odd_row(y) do
         pos_curr[1] = pos_curr[1] + 1
-      else
+      else do
         pos_curr[1] = pos_curr[1] - 1
       end
 
