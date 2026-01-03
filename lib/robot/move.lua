@@ -7,8 +7,8 @@ if move then return end
 
 local move = {}
 
-BOT = require("robot")
-NAV = component.navigation
+local BOT = require("robot")
+local NAV = require("component").navigation
 
 move.FACINGS = {
   ["N"] = 2,
@@ -100,11 +100,11 @@ function move.travel_pos(curr_pos, new_pos)
   local dist_x = new_pos[1] - curr_pos[1]
   local dist_y = new_pos[2] - curr_pos[2]
 
-  if facing_y() then
+  if move.facing_y() then
     move.travel_plane(dist_y)
     move.face_dir("E")
     move.travel_plane(dist_x)
-  elseif facing_x() then
+  elseif move.facing_x() then
     move.travel_plane(dist_x)
     move.face_dir("N")
     move.travel_plane(dist_y)
