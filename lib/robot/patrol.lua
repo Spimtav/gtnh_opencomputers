@@ -1,6 +1,8 @@
 --[[
 Notes: 
-  - assumes charger is 1 block south of bottom-left corner of plot.
+  - placement assumptions:
+    - charger is adjacent to bottom left corner of patrollable area
+    - patrollable area is a solid rectangle
 ]]
 
 if patrol then return end
@@ -12,8 +14,8 @@ package.loaded.move = nil
 local BOT = require("robot")
 local MOVE = require("move")
 
-patrol.PLOT_LENGTH = 3
-patrol.PLOT_WIDTH = 3
+patrol.PATROL_LENGTH = 3
+patrol.PATROL_WIDTH = 3
 patrol.POS_START = {0, 0}
 
 patrol.POS_CURR = {0, 0}
@@ -76,11 +78,11 @@ function patrol.patrol(bot_func)
   
   local func_calls = 0
   for rounds=1,2 do
-    for y=0,(patrol.PLOT_LENGTH-1) do
+    for y=0,(patrol.PATROL_LENGTH-1) do
       patrol.travel_y(y)
       patrol.face_inward_x(y)
  
-      for x=0,(patrol.PLOT_WIDTH-1) do
+      for x=0,(patrol.PATROL_WIDTH-1) do
         patrol.travel_x(x, y)
 
         bot_func()

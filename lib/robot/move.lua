@@ -11,12 +11,16 @@ local BOT = require("robot")
 local NAV = require("component").navigation
 
 move.FACINGS = {
+  ["D"] = 0,
+  ["U"] = 1,
   ["N"] = 2,
   ["S"] = 3,
   ["W"] = 4,
   ["E"] = 5
 }
 move.MC_FACINGS = {
+  [0] = "D",
+  [1] = "U",
   [2] = "N",
   [3] = "S",
   [4] = "W",

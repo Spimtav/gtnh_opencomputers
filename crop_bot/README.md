@@ -4,6 +4,9 @@ This dir contains various scripts for automating a robot to perform various proc
   - WARNING: overwrites any existing files.
 - .shrc: gets run on boot, mostly used for convenience stuff.
 - test.lua: convenience script to make testing and debugging easier.
+- cultivate.lua: script for robot to create a plot of IC2 crops with the specified stats
+  - odd coords: crops with specified stats
+  - even coords: empty w/o crop sticks (to prevent weeds)
 
 ## Bootstrapping
 OpenComputers computers run a very rudimentary, custom OS called OpenOS.  I haven't investigated whether it's even capable of running git natively, so until I invest time into that the best way to load this code is via `wget`.
