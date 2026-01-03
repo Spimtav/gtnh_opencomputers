@@ -71,9 +71,10 @@ function patrol.print_pos()
 end
 
 
-function patrol.main()
+function patrol.main(bot_func)
   patrol.reset_pos()
   
+  local func_calls = 0
   for rounds=1,2 do
     for y=0,(patrol.PLOT_LENGTH-1) do
       patrol.travel_y(y)
@@ -81,6 +82,10 @@ function patrol.main()
  
       for x=0,(patrol.PLOT_WIDTH-1) do
         patrol.travel_x(x, y)
+
+        bot_func()
+        func_calls = func_calls + 1
+        print("Func calls: "..func_calls)
       end
     end
   
