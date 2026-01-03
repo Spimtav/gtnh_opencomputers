@@ -12,11 +12,11 @@ package.loaded.move = nil
 local BOT = require("robot")
 local MOVE = require("move")
 
-local patrol.PLOT_LENGTH = 3
-local patrol.PLOT_WIDTH = 3
-local patrol.POS_START = {0, 0}
+patrol.PLOT_LENGTH = 3
+patrol.PLOT_WIDTH = 3
+patrol.POS_START = {0, 0}
 
-local patrol.POS_CURR = {0, 0}
+patrol.POS_CURR = {0, 0}
 
 
 function patrol.reset_pos()
@@ -71,7 +71,7 @@ function patrol.print_pos()
 end
 
 
-function patrol.main(bot_func)
+function patrol.patrol(bot_func)
   patrol.reset_pos()
   
   local func_calls = 0
