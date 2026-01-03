@@ -20,12 +20,12 @@ function reset_pos()
   pos_curr[2] = POS_START[2]
 end
 
-function odd_row(row)
-  return (row % 2) == 1
+function even_row(row)
+  return (row % 2) == 0
 end
 
 function travel_y(y)
-  if y > 1 then
+  if y > 0 then
     MOVE.travel_dir("N", 1)
     pos_curr[2] = pos_curr[2] + 1
   end
@@ -33,14 +33,17 @@ function travel_y(y)
   print_pos()
 end
 
-function travel_x(y)
-  BOT.forward()
-  
-  if odd_row(y) then
-    pos_curr[1] = pos_curr[1] + 1
-  else
-    pos_curr[1] = pos_curr[1] - 1
-  end 
+function travel_x(x, y)
+  if x > 0 then
+    BOT.forward()
+
+    local dist = -1
+    if even_row(y) then
+      dist = 1
+    end
+
+    pos_curr[1] = pos_curr[1] + dist
+  end
   
   print_pos()
 end
@@ -52,7 +55,7 @@ function travel_start()
 end
 
 function face_inward_x(y)
-  if odd_row(y) then
+  if even_row(y) then
     MOVE.face_dir("E")
   else
     MOVE.face_dir("W")
@@ -68,12 +71,12 @@ function main()
   reset_pos()
   
   for rounds=1,2 do
-    for y=1,PLOT_LENGTH do
+    for y=0,(PLOT_LENGTH-1) do
       travel_y(y)
       face_inward_x(y)
  
-      for x=1,PLOT_WIDTH do
-        travel_x(y)
+      for x=0,(PLOT_WIDTH-1) do
+        travel_x(x, y)
       end
     end
   
