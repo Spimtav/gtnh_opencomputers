@@ -3,86 +3,90 @@ Notes:
   - assumes charger is 1 block south of bottom-left corner of plot.
 ]]
 
+if patrol then return end
+
+local patrol = {}
+
 package.loaded.move = nil
 
 local BOT = require("robot")
 local MOVE = require("move")
 
-local PLOT_LENGTH = 3
-local PLOT_WIDTH = 3
-local POS_START = {0, 0}
+local patrol.PLOT_LENGTH = 3
+local patrol.PLOT_WIDTH = 3
+local patrol.POS_START = {0, 0}
 
-local pos_curr = {0, 0}
+local patrol.POS_CURR = {0, 0}
 
 
-function reset_pos()
-  pos_curr[1] = POS_START[1]
-  pos_curr[2] = POS_START[2]
+function patrol.reset_pos()
+  patrol.POS_CURR[1] = patrol.POS_START[1]
+  patrol.POS_CURR[2] = patrol.POS_START[2]
 end
 
-function even_row(row)
+function patrol.even_row(row)
   return (row % 2) == 0
 end
 
-function travel_y(y)
+function patrol.travel_y(y)
   if y > 0 then
     MOVE.travel_dir("N", 1)
-    pos_curr[2] = pos_curr[2] + 1
+    patrol.POS_CURR[2] = patrol.POS_CURR[2] + 1
   end
  
-  print_pos()
+  patrol.print_pos()
 end
 
-function travel_x(x, y)
+function patrol.travel_x(x, y)
   if x > 0 then
     BOT.forward()
 
     local dist = -1
-    if even_row(y) then
+    if patrol.even_row(y) then
       dist = 1
     end
 
-    pos_curr[1] = pos_curr[1] + dist
+    patrol.POS_CURR[1] = patrol.POS_CURR[1] + dist
   end
   
-  print_pos()
+  patrol.print_pos()
 end
 
-function travel_start()
+function patrol.travel_start()
   print("Resetting to charger")
-  MOVE.travel_pos(pos_curr, POS_START)
-  reset_pos()
+  MOVE.travel_pos(POS_CURR, POS_START)
+  patrol.reset_pos()
 end
 
-function face_inward_x(y)
-  if even_row(y) then
+function patrol.face_inward_x(y)
+  if patrol.even_row(y) then
     MOVE.face_dir("E")
   else
     MOVE.face_dir("W")
   end
 end
 
-function print_pos() 
-  print("At: ("..pos_curr[1]..", "..pos_curr[2]..")")
+function patrol.print_pos() 
+  print("At: ("..patrol.POS_CURR[1]..", "..patrol.POS_CURR[2]..")")
 end
 
 
-function main()
-  reset_pos()
+function patrol.main()
+  patrol.reset_pos()
   
   for rounds=1,2 do
-    for y=0,(PLOT_LENGTH-1) do
-      travel_y(y)
-      face_inward_x(y)
+    for y=0,(patrol.PLOT_LENGTH-1) do
+      patrol.travel_y(y)
+      patrol.face_inward_x(y)
  
-      for x=0,(PLOT_WIDTH-1) do
-        travel_x(x, y)
+      for x=0,(patrol.PLOT_WIDTH-1) do
+        patrol.travel_x(x, y)
       end
     end
   
-    travel_start()
+    patrol.travel_start()
   end
 end
 
-main()
+return patrol
 
