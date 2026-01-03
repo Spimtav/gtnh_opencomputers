@@ -14,7 +14,7 @@ local POS_START = {0, 0}
 
 
 function odd_row(row)
-  (row % 2) == 1
+  return (row % 2) == 1
 end
 
 local pos_curr = POS_START
