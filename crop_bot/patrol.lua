@@ -54,7 +54,7 @@ end
 
 function patrol.travel_start()
   print("Resetting to charger")
-  MOVE.travel_pos(POS_CURR, POS_START)
+  MOVE.travel_pos(patrol.POS_CURR, patrol.POS_START)
   patrol.reset_pos()
 end
 
