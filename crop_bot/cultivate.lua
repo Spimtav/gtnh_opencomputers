@@ -27,6 +27,10 @@ GEO = require("component").geolyzer
 MOVE = require("move")
 PATROL = require("patrol")
 
+
+local PLOT_LENGTH = 2
+local PLOT_WIDTH = 2
+
 local MAX_GROWTH = 21
 local MAX_GAIN = 32
 local MAX_RESISTANCE = 0
@@ -43,6 +47,10 @@ function pos_str()
 end
 
 function crop_stat_str(stat_table)
+  if stat_table == nil then
+    return "-"
+  end
+
   local name = stat_table["crop:name"]
   local growth = stat_table["crop:growth"]
   local gain = stat_table["crop:gain"]
@@ -64,25 +72,43 @@ function print_crop_table(table)
   end
 end
 
-function cultivate()
+function is_weed(crop_data)
+  return crop_data["crop:name"] == "weed"
+end
+
+function is_empty(crop_data)
+  return crop_data["crop:name"] == nil
+end
+
+function analyze_crop()
   local crop_data = GEO.analyze(MOVE.FACINGS["D"])
 
-  local crop_table = CHILD_CROPS
+  local crops_table = CHILD_CROPS
   if odd_pos() then
-    crop_table = PARENT_CROPS
+    crops_table = PARENT_CROPS
   end
 
-  crop_table[pos_str()] = crop_data
+  if is_weed(crop_data) or is_empty(crop_data) then
+    return
+  end
+
+  crops_table[pos_str()] = crop_data
+end
+
+function cultivate()
+  PATROL.patrol(analyze_crop, PLOT_LENGTH, PLOT_WIDTH)
+
+  print("Parents (odd):")
+  print_crop_table(PARENT_CROPS)
+  print("\n\n")
+  print("Children (even):"
+  print_crop_table(CHILD_CROPS)
 end
 
 
 function main()
-  PATROL.patrol(cultivate, 2, 2)
-
-  print_crop_table(PARENT_CROPS)
-  print_crop_table(CHILD_CROPS)
+  cultivate()
 end
-
 
 main()
 
