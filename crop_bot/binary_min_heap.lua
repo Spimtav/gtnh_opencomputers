@@ -12,39 +12,23 @@ local Min_Heap = {}
 -- Heap node
 Min_Heap.Heap_Node = {}
 
-function Min_Heap.Heap_Node:new(val)
+function Min_Heap.Heap_Node:new(val, pos)
   local node = {
-    val = val or 0,
-    elems = {}
+    val = val,
+    elem = pos
   }
   setmetatable(node, self)
   self.__index = self
   return node
 end
 
-function Min_Heap.Heap_Node:is_empty()
-  return next(self.elems) == nil
-end
-
-function Min_Heap.Heap_Node:append(elem)
-  table.insert(self.elems, elem)
-end
-
-function Min_Heap.Heap_Node:remove()
-  return table.remove(self.elems)
-end
-
 function Min_Heap.Heap_Node:print()
   print("Val: "..self.val)
-  print("Elems:")
-  for _,i in ipairs(self.elems) do
-    print("  ("..i[1]..","..i[2]..")")
-  end
+  print("Elem: "..self.elem)
 end
 
 -- Binary Min Heap
 Min_Heap.heap = {}
-Min_Heap.test = {}
 
 function Min_Heap:new()
   local new_heap = {}
@@ -53,8 +37,29 @@ function Min_Heap:new()
   return new_heap
 end
 
-function Min_Heap:set_test_val(i)
-  self.test = i
+function Min_Heap:insert(val, pos)
+  local last_i = #self.heap + 1
+  local node = Min_Heap.Heap_Node:new(val, pos)
+  self.heap[last_i] = node
+  self:bubble_up(last_i)
+end
+
+function Min_Heap:bubble_up(i)
+  local node = self.heap[i]
+
+  -- Base Case: root
+  if i == 1 then return end
+
+  -- Base Case: finished
+  local parent_i = math.floor(i/2)
+  local parent_node = self.heap[parent_i]
+
+  if parent_node.val <= node.val then return end
+
+  -- Tail Recursion
+  self.heap[parent_i] = node
+  self.heap[i] = parent_node
+  return self:bubble_up(parent_i)
 end
 
 
