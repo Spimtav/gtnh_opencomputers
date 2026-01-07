@@ -40,10 +40,7 @@ local CHILD_CROPS = {}
 
 
 function pos_str()
-  local x = PATROL.POS_CURR[1]
-  local y = PATROL.POS_CURR[2]
-
-  return x..","..y
+  return PATROL.POS_CURR.x..","..PATROL.POS_CURR.y
 end
 
 function crop_stat_str(stat_table)
@@ -60,8 +57,8 @@ function crop_stat_str(stat_table)
 end
 
 function odd_pos()
-  local x = PATROL.POS_CURR[1]
-  local y = PATROL.POS_CURR[2]
+  local x = PATROL.POS_CURR.x
+  local y = PATROL.POS_CURR.y
 
   return (x+y % 2) == 1
 end

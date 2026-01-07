@@ -1,5 +1,5 @@
 --[[
-Notes: 
+Notes:
   - placement assumptions:
     - charger is adjacent to bottom left corner of patrollable area
     - patrollable area is a solid rectangle
@@ -13,14 +13,33 @@ package.loaded.move = nil
 
 local BOT = require("robot")
 local MOVE = require("move")
+local COORD = require("coord")
 
-patrol.POS_START = {0, 0}
-patrol.POS_CURR = {0, 0}
+-- Coord
+patrol.Coord = {}
+
+function patrol.Coord:new(x,y)
+  local coord = {
+    x = x
+    y = y
+  }
+  setmetatable(coord, self)
+  self.__index = self
+  return coord
+end
+
+function patrol.Coord:__tostring()
+  return "{"..self.x..","..self.y.."}"
+end
+
+
+-- Patrol
+patrol.POS_START = patrol.Coord:new(0,0)
+patrol.POS_CURR = patrol.Coord:new(0,0)
 
 
 function patrol.reset_pos()
-  patrol.POS_CURR[1] = patrol.POS_START[1]
-  patrol.POS_CURR[2] = patrol.POS_START[2]
+  patrol.POS_CURR = patrol.Coord:new(0,0)
 end
 
 function patrol.even_row(row)
@@ -30,9 +49,9 @@ end
 function patrol.travel_y(y)
   if y > 0 then
     MOVE.travel_dir("N", 1)
-    patrol.POS_CURR[2] = patrol.POS_CURR[2] + 1
+    patrol.POS_CURR.y = patrol.POS_CURR.y + 1
   end
- 
+
   patrol.print_pos()
 end
 
@@ -45,9 +64,9 @@ function patrol.travel_x(x, y)
       dist = 1
     end
 
-    patrol.POS_CURR[1] = patrol.POS_CURR[1] + dist
+    patrol.POS_CURR.x = patrol.POS_CURR.x + dist
   end
-  
+
   patrol.print_pos()
 end
 
@@ -65,19 +84,19 @@ function patrol.face_inward_x(y)
   end
 end
 
-function patrol.print_pos() 
-  print("At: ("..patrol.POS_CURR[1]..", "..patrol.POS_CURR[2]..")")
+function patrol.print_pos()
+  print("At: ("..patrol.POS_CURR.x..", "..patrol.POS_CURR.y..")")
 end
 
 
 function patrol.patrol(bot_func, patrol_length, patrol_width)
   patrol.reset_pos()
-  
+
   local func_calls = 0
   for y=0,(patrol_length-1) do
     patrol.travel_y(y)
     patrol.face_inward_x(y)
- 
+
     for x=0,(patrol_width-1) do
       patrol.travel_x(x, y)
 
