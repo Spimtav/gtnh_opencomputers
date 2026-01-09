@@ -15,13 +15,13 @@ local base_url = "https://raw.githubusercontent.com/Spimtav/gtnh_opencomputers/r
 
 
 local script_path = debug.getinfo(2).source:sub(2):match("(.*)/") or "."
-local abs_root = shell.resolve("script_path")
+local abs_root = shell.resolve(script_path)
 local project = dofile(abs_root.."/project.lua")
 
 
 -- replicate directory structure
 for _,dir in pairs(project.folders) do
-  fs.makeDirectory(abs_dir.."/"..dir)
+  fs.makeDirectory(abs_root.."/"..dir)
 end
 
 -- fetch files from github

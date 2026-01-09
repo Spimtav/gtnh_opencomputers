@@ -25,6 +25,7 @@ project.files = {
   "exec.lua",
   "fetch.lua",
   "project.lua",
+  "hello.lua",
   "lib/common/binary_min_heap.lua",
   "lib/robot/patrol.lua",
   "lib/robot/move.lua",
