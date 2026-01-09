@@ -2,7 +2,8 @@
 Notes:
 - universal entry point for all project scripts
   - assumes project scripts have a main() method as their entry point
-- loads common configs, constants, and env vars for scripts to use
+- (TODO) loads common configs, constants, and env vars for scripts to use
+- (TODO) drops project modules from the cache to make life easier
 ]]
 
 

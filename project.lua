@@ -11,7 +11,6 @@ Notes:
 local project = {}
 
 
--- put parent directories before their subdirs
 project.folders = {
   "lib",
   "lib/common",
@@ -25,7 +24,7 @@ project.files = {
   "README.md",
   "exec.lua",
   "fetch.lua",
-  "layout.lua",
+  "project.lua",
   "lib/common/binary_min_heap.lua",
   "lib/robot/patrol.lua",
   "lib/robot/move.lua",
