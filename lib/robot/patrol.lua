@@ -5,52 +5,38 @@ Notes:
     - patrollable area is a solid rectangle
 ]]
 
-if patrol then return end
 
-local patrol = {}
-
-package.loaded.move = nil
+local Patrol = {}
 
 local BOT = require("robot")
 local MOVE = require("move")
 local COORD = require("coord")
 
--- Coord
-patrol.Coord = {}
 
-function patrol.Coord:new(x,y)
-  local coord = {
-    x = x
-    y = y
+function Patrol:new()
+  local patrol = {
+    pos_start = COORD:new(0,0),
+    pos_curr = COORD:new(0,0)
   }
-  setmetatable(coord, self)
+  setmetatable(patrol, self)
   self.__index = self
-  return coord
+  return patrol
 end
 
-function patrol.Coord:__tostring()
-  return "{"..self.x..","..self.y.."}"
+function Patrol:reset_pos()
+  self.pos_curr:reset()
 end
 
-
--- Patrol
-patrol.POS_START = patrol.Coord:new(0,0)
-patrol.POS_CURR = patrol.Coord:new(0,0)
-
-
-function patrol.reset_pos()
-  patrol.POS_CURR = patrol.Coord:new(0,0)
-end
-
-function patrol.even_row(row)
+function Patrol:even_row(row)
   return (row % 2) == 0
 end
 
-function patrol.travel_y(y)
+function Patrol:travel_y(y)
   if y > 0 then
     MOVE.travel_dir("N", 1)
-    patrol.POS_CURR.y = patrol.POS_CURR.y + 1
+    self.pos_curr:set_y(self.pos_curr.y + 1)
   end
+
 
   patrol.print_pos()
 end

@@ -22,5 +22,19 @@ function Coord:__tostring()
   return "{"..self.x..","..self.y.."}"
 end
 
+function Coord:reset()
+  self.x = 0
+  self.y = 0
+end
+
+function Coord:set_x(x)
+  self.x = x
+end
+
+function Coord:set_y(y)
+  self.y = y
+end
+
+
 return Coord
 
