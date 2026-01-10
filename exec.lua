@@ -2,8 +2,8 @@
 Notes:
 - universal entry point for all project scripts
   - assumes project scripts have a main() method as their entry point
-- (TODO) loads common configs, constants, and env vars for scripts to use
-- (TODO) drops project modules from the cache to make life easier
+- loads common configs, constants, and env vars for scripts to use
+- drops project modules from the cache to make life easier
 ]]
 
 
@@ -46,6 +46,9 @@ for _,filepath in pairs(project.files) do
     package.loaded[file_name] = nil
   end
 end
+
+-- Load project configs
+require("const")
 
 -- Execute specified script's main()
 local script_mod = require(args[1])

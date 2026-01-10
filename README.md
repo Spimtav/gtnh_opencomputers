@@ -21,8 +21,8 @@ OpenComputers entities run a very rudimentary, custom OS called OpenOS.  I haven
 ## Executing Scripts
 OpenOS doesn't appear to use the `LUA_PATH` variable to prepopulate its search path.  As such, `exec.lua` serves as the universal project entrypoint and will:
 - prepend all of this project's directories to `package.path` so that module loading is seamless.
-- (TODO) load configs and environment variables.
-- (TODO) remove all project modules from the cache for QoL.  OpenOS preserves module loads indefinitely until you manually reboot the machine, so debugging can get very annoying very quickly.  
+- load configs and environment variables.
+- remove all project modules from the cache for QoL.  OpenOS preserves module loads indefinitely until you manually reboot the machine, so debugging can get very annoying very quickly.  
 
 ## Development
 Guidelines for updating this project:
