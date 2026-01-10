@@ -7,6 +7,7 @@ Notes:
 ]]
 
 
+local fs = require("filesystem")
 local shell = require("shell")
 local paths_env_var = "PATHS_LOADED"
 local args = {...}
@@ -35,6 +36,15 @@ if not string.find(paths_loaded, ";"..abs_root..";", 1, true) then
   package.path = abs_root.."/?.lua;"..package.path
 
   os.setenv(paths_env_var, paths_loaded..abs_root..";")
+end
+
+-- Clear cached project modules
+for _,filepath in pairs(project.files) do
+  local file_name = fs.name(filepath)
+  if file_name:match(".*%.lua$") ~= nil then
+    file_name = file_name:sub(1, #file_name - 4)
+    package.loaded[file_name] = nil
+  end
 end
 
 -- Execute specified script's main()
