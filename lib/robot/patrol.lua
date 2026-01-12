@@ -72,7 +72,7 @@ function patrol:face_inward_x(y)
 end
 
 function patrol:__tostring()
-  return "At: ("..self.pos_curr.x..", "..self.pos_curr.y..")")
+  return "At: ("..self.pos_curr.x..", "..self.pos_curr.y..")"
 end
 
 

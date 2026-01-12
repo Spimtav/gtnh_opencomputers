@@ -32,6 +32,7 @@ project.files = {
   "lib/common/logging.lua",
   "lib/robot/patrol.lua",
   "lib/robot/move.lua",
+  "lib/robot/coord.lua",
   "crop_bot/README.md",
   "crop_bot/cultivate.lua"
 }

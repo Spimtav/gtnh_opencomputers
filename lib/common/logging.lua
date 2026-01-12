@@ -7,7 +7,7 @@ Notes:
 local logging = {}
 
 
-local logging.print(s, level)
+function logging.print(s, level)
   if level >= env.log_level then
     print(const.log_level_names[level]..": "..s)
   end
