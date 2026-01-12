@@ -1,19 +1,20 @@
 --[[
 Notes:
   - placement assumptions:
-    - charger is adjacent to bottom left corner of patrollable area
     - patrollable area is a solid rectangle
+    - robot starts in bottom left corner of patrollable area
+    - patrollable area is pointed towards true north
 ]]
 
 
-local Patrol = {}
+local patrol = {}
 
-local BOT = require("robot")
-local MOVE = require("move")
-local COORD = require("coord")
+local bot = require("robot")
+local move = require("move")
+local coord = require("coord")
 
 
-function Patrol:new()
+function patrol:new()
   local patrol = {
     pos_start = COORD:new(0,0),
     pos_curr = COORD:new(0,0)
@@ -23,76 +24,73 @@ function Patrol:new()
   return patrol
 end
 
-function Patrol:reset_pos()
+function patrol:reset_pos()
   self.pos_curr:reset()
 end
 
-function Patrol:even_row(row)
+function patrol:even_row(row)
   return (row % 2) == 0
 end
 
-function Patrol:travel_y(y)
+function patrol:travel_y(y)
   if y > 0 then
-    MOVE.travel_dir("N", 1)
+    move.travel_dir("N", 1)
     self.pos_curr:set_y(self.pos_curr.y + 1)
   end
 
-
-  patrol.print_pos()
+  logging.print(tostring(self), const.log_levels.INFO)
 end
 
-function patrol.travel_x(x, y)
+function patrol:travel_x(x, y)
   if x > 0 then
-    BOT.forward()
+    bot.forward()
 
     local dist = -1
-    if patrol.even_row(y) then
+    if self:even_row(y) then
       dist = 1
     end
 
-    patrol.POS_CURR.x = patrol.POS_CURR.x + dist
+    self.pos_curr:set_x(self.pos_curr.x + dist)
   end
 
-  patrol.print_pos()
+  logging.print(tostring(self), const.log_levels.INFO)
 end
 
-function patrol.travel_start()
-  print("Resetting to charger")
-  MOVE.travel_pos(patrol.POS_CURR, patrol.POS_START)
-  patrol.reset_pos()
+function patrol:travel_start()
+  move.travel_pos(self.pos_curr, self.pos_start)
+  self:reset_pos()
+
+  logging.print("Reset to charger", const.log_levels.INFO)
 end
 
-function patrol.face_inward_x(y)
-  if patrol.even_row(y) then
-    MOVE.face_dir("E")
+function patrol:face_inward_x(y)
+  if self:even_row(y) then
+    move.face_dir("E")
   else
-    MOVE.face_dir("W")
+    move.face_dir("W")
   end
 end
 
-function patrol.print_pos()
-  print("At: ("..patrol.POS_CURR.x..", "..patrol.POS_CURR.y..")")
+function patrol:__tostring()
+  return "At: ("..self.pos_curr.x..", "..self.pos_curr.y..")")
 end
 
 
-function patrol.patrol(bot_func, patrol_length, patrol_width)
-  patrol.reset_pos()
+function patrol:patrol(bot_func, patrol_length, patrol_width)
+  self:reset_pos()
 
-  local func_calls = 0
   for y=0,(patrol_length-1) do
-    patrol.travel_y(y)
-    patrol.face_inward_x(y)
+    self:travel_y(y)
+    self:face_inward_x(y)
 
     for x=0,(patrol_width-1) do
-      patrol.travel_x(x, y)
+      self:travel_x(x, y)
 
       bot_func()
-      func_calls = func_calls + 1
-      print("Func calls: "..func_calls)
     end
   end
 
-  patrol.travel_start()
+  self:travel_start()
 end
 
 return patrol
