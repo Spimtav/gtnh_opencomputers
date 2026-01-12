@@ -2,7 +2,7 @@ local hello = {}
 
 
 function hello.main()
-  print("hello!")
+  logging.print("hello!", const.log_levels.INFO)
 end
 
 
