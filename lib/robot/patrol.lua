@@ -38,7 +38,7 @@ function Patrol:travel_y(y)
     self.pos_curr:set_y(self.pos_curr.y + 1)
   end
 
-  logging.print(tostring(self), const.log_levels.INFO)
+  logging.print(tostring(self), const.log_levels.DEBUG)
 end
 
 function Patrol:travel_x(x, y)
@@ -53,14 +53,14 @@ function Patrol:travel_x(x, y)
     self.pos_curr:set_x(self.pos_curr.x + dist)
   end
 
-  logging.print(tostring(self), const.log_levels.INFO)
+  logging.print(tostring(self), const.log_levels.DEBUG)
 end
 
 function Patrol:travel_start()
   move.travel_pos(self.pos_curr, self.pos_start)
   self:reset_pos()
 
-  logging.print("Reset to charger", const.log_levels.INFO)
+  logging.print("Reset to charger", const.log_levels.DEBUG)
 end
 
 function Patrol:face_inward_x(y)

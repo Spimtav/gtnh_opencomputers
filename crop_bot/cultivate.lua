@@ -19,31 +19,34 @@ Notes:
     - never depletes
 ]]
 
-package.loaded.move = nil
-package.loaded.patrol = nil
 
-BOT = require("robot")
-GEO = require("component").geolyzer
-MOVE = require("move")
-PATROL = require("patrol")
+bot = require("robot")
+geo = require("component").geolyzer
+move = require("move")
+patrol = require("patrol")
 
 
-local PLOT_LENGTH = 2
-local PLOT_WIDTH = 2
-
-local MAX_GROWTH = 21
-local MAX_GAIN = 32
-local MAX_RESISTANCE = 0
-
-local PARENT_CROPS = {}
-local CHILD_CROPS = {}
+local Cultivate = {}
 
 
-function pos_str()
-  return PATROL.POS_CURR.x..","..PATROL.POS_CURR.y
+function Cultivate:new()
+  local new_cul = {
+    crops_parent = {},
+    crops_child = {},
+    patrol = patrol:new()
+  }
+  setmetatable(new_cul, self)
+  self.__index = self
+  return new_cul
 end
 
-function crop_stat_str(stat_table)
+function Cultivate:pos_str()
+  local pos_curr = self.patrol.pos_curr
+
+  return pos_curr.x..","..pos_curr.y
+end
+
+function Cultivate:crop_stat_str(stat_table)
   if stat_table == nil then
     return "-"
   end
@@ -56,44 +59,46 @@ function crop_stat_str(stat_table)
   return name..": "..growth..","..gain..","..resistance
 end
 
-function odd_pos()
-  local x = PATROL.POS_CURR.x
-  local y = PATROL.POS_CURR.y
+function Cultivate:odd_pos()
+  local x = self.patrol.pos_curr.x
+  local y = self.patrol.pos_curr.y
 
   return (x+y % 2) == 1
 end
 
-function print_crop_table(table)
+function Cultivate:print_crop_table(table)
   for k,v in pairs(table) do
-    print(k..": ["..crop_stat_str(v).."]")
+    logging.print(k..": ["..self.crop_stat_str(v).."]", const.log_levels.DEBUG)
   end
 end
 
-function is_weed(crop_data)
+function Cultivate:is_weed(crop_data)
   return crop_data["crop:name"] == "weed"
 end
 
-function is_empty(crop_data)
+function Cultivate:is_empty(crop_data)
   return crop_data["crop:name"] == nil
 end
 
-function analyze_crop()
-  local crop_data = GEO.analyze(MOVE.FACINGS["D"])
+function Cultivate:analyze_crop()
+  local crop_data = geo.analyze(move.FACINGS["D"])
 
-  local crops_table = CHILD_CROPS
-  if odd_pos() then
-    crops_table = PARENT_CROPS
+  local crops_table = self.crops_child
+  if self:odd_pos() then
+    crops_table = self.crops_parent
   end
 
-  if is_weed(crop_data) or is_empty(crop_data) then
+  if self:is_weed(crop_data) or self:is_empty(crop_data) then
     return
   end
 
   crops_table[pos_str()] = crop_data
 end
 
-function cultivate()
-  PATROL.patrol(analyze_crop, PLOT_LENGTH, PLOT_WIDTH)
+function Cultivate:cultivate()
+  local length = const.crop_bot.cultivate.PLOT_LENGTH
+  local width = const.crop_bot.cultivate.PLOT_WIDTH
+  self.patrol:patrol(self:analyze_crop, length, width)
 
   print("Parents (odd):")
   print_crop_table(PARENT_CROPS)
@@ -104,8 +109,11 @@ end
 
 
 function main()
-  cultivate()
+  local cul = Cultivate:new()
+
+  cul:cultivate()
 end
 
-main()
+
+return Cultivate
 

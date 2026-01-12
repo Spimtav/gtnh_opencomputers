@@ -21,5 +21,16 @@ for k,v in pairs(const.log_levels) do
 end
 
 
+const.crop_bot = {
+  PLOT_LENGTH = 2,
+  PLOT_WIDTH = 2
+}
+
+const.crop_bot.cultivate = {
+  MAX_GROWTH = 21,
+  MAX_GAIN = 31
+}
+
+
 return const
 
