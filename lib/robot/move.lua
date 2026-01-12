@@ -7,8 +7,8 @@ if move then return end
 
 local move = {}
 
-local BOT = require("robot")
-local NAV = require("component").navigation
+local bot = require("robot")
+local nav = require("component").navigation
 
 move.FACINGS = {
   ["D"] = 0,
@@ -43,45 +43,45 @@ move.TURNS = {
 
 
 function move.facing_x()
-  local dir_curr = NAV.getFacing()
+  local dir_curr = nav.getFacing()
 
   return dir_curr == move.FACINGS["W"] or dir_curr == move.FACINGS["E"]
 end
 
 function move.facing_y()
-  local dir_curr = NAV.getFacing()
+  local dir_curr = nav.getFacing()
 
   return dir_curr == move.FACINGS["N"] or dir_curr == move.FACINGS["S"]
 end
 
 function move.face_dir(dir_new)
-  local dir_curr = move.MC_FACINGS[NAV.getFacing()]
+  local dir_curr = move.MC_FACINGS[nav.getFacing()]
 
   if dir_curr == dir_new then
     return
   end
 
-  BOT[move.TURNS[dir_curr..dir_new]]()
+  bot[move.TURNS[dir_curr..dir_new]]()
 end
 
 function move.move_func_plane(dist_new)
-  local dir_curr = NAV.getFacing()
+  local dir_curr = nav.getFacing()
 
   if dist_new > 0 and (dir_curr == move.FACINGS["N"] or dir_curr == move.FACINGS["E"]) then
-    return BOT.forward
+    return bot.forward
   elseif dist_new < 0 and (dir_curr == move.FACINGS["S"] or dir_curr == move.FACINGS["W"]) then
-    return BOT.forward
+    return bot.forward
   end
 
-  return BOT.back
+  return bot.back
 end
 
 function move.move_func_relative(dist)
   if dist > 0 then
-    return BOT.forward
+    return bot.forward
   end
 
-  return BOT.back
+  return bot.back
 end
 
 function move.travel(dist, move_func)
@@ -121,21 +121,21 @@ function move.travel_dir(dir, dist)
 end
 
 function move.travel_forward(dist)
-  move.travel(dist, BOT.forward)
+  move.travel(dist, bot.forward)
 end
 
 function move.travel_back(dist)
-  move.travel(dist, BOT.back)
+  move.travel(dist, bot.back)
 end
 
 function move.travel_left(dist)
-  BOT.turnLeft()
-  move.travel(dist, BOT.forward)
+  bot.turnLeft()
+  move.travel(dist, bot.forward)
 end
 
 function move.travel_right(dist)
-  BOT.turnRight()
-  move.travel(dist, BOT.forward)
+  bot.turnRight()
+  move.travel(dist, bot.forward)
 end
 
 
