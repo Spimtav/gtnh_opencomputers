@@ -72,7 +72,7 @@ function move.move_func_plane(dist_new)
   elseif dist_new < 0 and (dir_curr == move.FACINGS["S"] or dir_curr == move.FACINGS["W"]) then
     return BOT.forward
   end
-  
+
   return BOT.back
 end
 
@@ -101,8 +101,8 @@ function move.travel_relative(dist_rel)
 end
 
 function move.travel_pos(curr_pos, new_pos)
-  local dist_x = new_pos[1] - curr_pos[1]
-  local dist_y = new_pos[2] - curr_pos[2]
+  local dist_x = new_pos.x - curr_pos.x
+  local dist_y = new_pos.y - curr_pos.y
 
   if move.facing_y() then
     move.travel_plane(dist_y)

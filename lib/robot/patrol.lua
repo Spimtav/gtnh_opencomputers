@@ -16,8 +16,8 @@ local coord = require("coord")
 
 function Patrol:new()
   local new_patrol = {
-    pos_start = COORD:new(0,0),
-    pos_curr = COORD:new(0,0)
+    pos_start = coord:new(0,0),
+    pos_curr = coord:new(0,0)
   }
   setmetatable(new_patrol, self)
   self.__index = self
