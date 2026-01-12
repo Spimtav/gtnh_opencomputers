@@ -76,7 +76,7 @@ function Patrol:__tostring()
 end
 
 
-function Patrol:patrol(bot_func, patrol_length, patrol_width)
+function Patrol:patrol(bot_func, bot_obj, patrol_length, patrol_width)
   self:reset_pos()
 
   for y=0,(patrol_length-1) do
@@ -86,7 +86,7 @@ function Patrol:patrol(bot_func, patrol_length, patrol_width)
     for x=0,(patrol_width-1) do
       self:travel_x(x, y)
 
-      bot_func()
+      bot_func(bot_obj)
     end
   end
 

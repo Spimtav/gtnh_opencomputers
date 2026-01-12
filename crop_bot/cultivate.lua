@@ -96,15 +96,15 @@ function Cultivate:analyze_crop()
 end
 
 function Cultivate:cultivate()
-  local length = const.crop_bot.cultivate.PLOT_LENGTH
-  local width = const.crop_bot.cultivate.PLOT_WIDTH
-  self.patrol:patrol(self:analyze_crop, length, width)
+  local length = const.crop_bot.PLOT_LENGTH
+  local width = const.crop_bot.PLOT_WIDTH
+  self.patrol:patrol(self.analyze_crop, self, length, width)
 
   print("Parents (odd):")
-  print_crop_table(PARENT_CROPS)
+  self:print_crop_table(self.crops_parent)
   print("\n\n")
-  print("Children (even):"
-  print_crop_table(CHILD_CROPS)
+  print("Children (even):")
+  self:print_crop_table(self.crops_child)
 end
 
 
