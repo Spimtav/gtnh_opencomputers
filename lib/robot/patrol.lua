@@ -7,32 +7,32 @@ Notes:
 ]]
 
 
-local patrol = {}
+local Patrol = {}
 
 local bot = require("robot")
 local move = require("move")
 local coord = require("coord")
 
 
-function patrol:new()
-  local patrol = {
+function Patrol:new()
+  local new_patrol = {
     pos_start = COORD:new(0,0),
     pos_curr = COORD:new(0,0)
   }
-  setmetatable(patrol, self)
+  setmetatable(new_patrol, self)
   self.__index = self
-  return patrol
+  return new_patrol
 end
 
-function patrol:reset_pos()
+function Patrol:reset_pos()
   self.pos_curr:reset()
 end
 
-function patrol:even_row(row)
+function Patrol:even_row(row)
   return (row % 2) == 0
 end
 
-function patrol:travel_y(y)
+function Patrol:travel_y(y)
   if y > 0 then
     move.travel_dir("N", 1)
     self.pos_curr:set_y(self.pos_curr.y + 1)
@@ -41,7 +41,7 @@ function patrol:travel_y(y)
   logging.print(tostring(self), const.log_levels.INFO)
 end
 
-function patrol:travel_x(x, y)
+function Patrol:travel_x(x, y)
   if x > 0 then
     bot.forward()
 
@@ -56,14 +56,14 @@ function patrol:travel_x(x, y)
   logging.print(tostring(self), const.log_levels.INFO)
 end
 
-function patrol:travel_start()
+function Patrol:travel_start()
   move.travel_pos(self.pos_curr, self.pos_start)
   self:reset_pos()
 
   logging.print("Reset to charger", const.log_levels.INFO)
 end
 
-function patrol:face_inward_x(y)
+function Patrol:face_inward_x(y)
   if self:even_row(y) then
     move.face_dir("E")
   else
@@ -71,12 +71,12 @@ function patrol:face_inward_x(y)
   end
 end
 
-function patrol:__tostring()
+function Patrol:__tostring()
   return "At: ("..self.pos_curr.x..", "..self.pos_curr.y..")"
 end
 
 
-function patrol:patrol(bot_func, patrol_length, patrol_width)
+function Patrol:patrol(bot_func, patrol_length, patrol_width)
   self:reset_pos()
 
   for y=0,(patrol_length-1) do
@@ -93,5 +93,6 @@ function patrol:patrol(bot_func, patrol_length, patrol_width)
   self:travel_start()
 end
 
-return patrol
+
+return Patrol
 
