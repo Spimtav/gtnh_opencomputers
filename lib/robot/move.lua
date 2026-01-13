@@ -3,29 +3,13 @@ Notes:
 - move optimized to minimize turns, in order to save robot's battery
 ]]
 
-if move then return end
 
 local move = {}
 
 local bot = require("robot")
 local nav = require("component").navigation
 
-move.FACINGS = {
-  ["D"] = 0,
-  ["U"] = 1,
-  ["N"] = 2,
-  ["S"] = 3,
-  ["W"] = 4,
-  ["E"] = 5
-}
-move.MC_FACINGS = {
-  [0] = "D",
-  [1] = "U",
-  [2] = "N",
-  [3] = "S",
-  [4] = "W",
-  [5] = "E"
-}
+
 move.TURNS = {
   ["NS"] = "turnAround",
   ["NW"] = "turnLeft",
@@ -45,17 +29,17 @@ move.TURNS = {
 function move.facing_x()
   local dir_curr = nav.getFacing()
 
-  return dir_curr == move.FACINGS["W"] or dir_curr == move.FACINGS["E"]
+  return dir_curr == const.FACINGS[const.W] or dir_curr == const.FACINGS[const.E]
 end
 
 function move.facing_y()
   local dir_curr = nav.getFacing()
 
-  return dir_curr == move.FACINGS["N"] or dir_curr == move.FACINGS["S"]
+  return dir_curr == const.FACINGS[const.N] or dir_curr == const.FACINGS[const.S]
 end
 
 function move.face_dir(dir_new)
-  local dir_curr = move.MC_FACINGS[nav.getFacing()]
+  local dir_curr = const.MC_FACINGS[nav.getFacing()]
 
   if dir_curr == dir_new then
     return
@@ -67,9 +51,9 @@ end
 function move.move_func_plane(dist_new)
   local dir_curr = nav.getFacing()
 
-  if dist_new > 0 and (dir_curr == move.FACINGS["N"] or dir_curr == move.FACINGS["E"]) then
+  if dist_new > 0 and (dir_curr == const.FACINGS[const.N] or dir_curr == const.FACINGS[const.E]) then
     return bot.forward
-  elseif dist_new < 0 and (dir_curr == move.FACINGS["S"] or dir_curr == move.FACINGS["W"]) then
+  elseif dist_new < 0 and (dir_curr == const.FACINGS[const.S] or dir_curr == const.FACINGS[const.W]) then
     return bot.forward
   end
 
@@ -106,11 +90,11 @@ function move.travel_pos(curr_pos, new_pos)
 
   if move.facing_y() then
     move.travel_plane(dist_y)
-    move.face_dir("E")
+    move.face_dir(const.E)
     move.travel_plane(dist_x)
   elseif move.facing_x() then
     move.travel_plane(dist_x)
-    move.face_dir("N")
+    move.face_dir(const.N)
     move.travel_plane(dist_y)
   end
 end
@@ -137,7 +121,6 @@ function move.travel_right(dist)
   bot.turnRight()
   move.travel(dist, bot.forward)
 end
-
 
 
 return move

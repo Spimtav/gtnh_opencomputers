@@ -18,6 +18,11 @@ function Coord:new(x,y)
   return coord
 end
 
+function Coord:set_to(coord)
+  self.x = coord.x
+  self.y = coord.y
+end
+
 function Coord:__tostring()
   return "{"..self.x..","..self.y.."}"
 end
