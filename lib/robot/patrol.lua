@@ -41,16 +41,16 @@ end
 
 function Patrol:travel_x(x, y)
   if x > 0 then
-    local dist = -1
+    local pos_dist = -1
     if self:even_row(y) then
-      dist = 1
-      move.travel_dir(const.E, dist)
+      pos_dist = 1
+      move.travel_dir(const.E, 1)
     else
-      move.travel_dir(const.W, dist)
+      move.travel_dir(const.W, 1)
     end
 
     self.pos_prev:set_to(self.pos_curr)
-    self.pos_curr:set_x(self.pos_curr.x + dist)
+    self.pos_curr:set_x(self.pos_curr.x + pos_dist)
   end
 
   logging.print(tostring(self), const.log_levels.DEBUG)

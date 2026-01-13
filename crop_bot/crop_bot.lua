@@ -25,12 +25,12 @@ function Crop_Bot:new()
     item_equipped = const.crop_bot.ITEM_SPADE,
     inv = {
       [1] = const.crop_bot.ITEM_BINDER,
-      [2] = const.ITEM_CROP
+      [2] = const.crop_bot.ITEM_CROP
     },
     items = {
-      const.crop_bot.ITEM_SPADE = const.crop_bot.ITEM_EQUIPPED,
-      const.crop_bot.ITEM_BINDER = 1,
-      const.crop_bot.ITEM_CROP = 2
+      [const.crop_bot.ITEM_SPADE] = const.crop_bot.ITEM_EQUIPPED,
+      [const.crop_bot.ITEM_BINDER] = 1,
+      [const.crop_bot.ITEM_CROP] = 2
     }
   }
   setmetatable(new_bot, self)
@@ -119,13 +119,14 @@ function Crop_Bot:add_crop()
   self:equip(const.crop_bot.ITEM_CROP)
   robot.useDown()
 
-  logging.print("Used crop stick", const.log_levels.DEBUG)
+  logging.print("Used crop stick at: "..self:pos_str(), const.log_levels.DEBUG)
 end
 
 -- TODO: replace weedified parent plant
 function Crop_Bot:handle_weed()
   self:equip(const.crop_bot.ITEM_SPADE)
   bot.useDown()
+  logging.print("Removed weed at: "..self:pos_str(), const.log_levels.DEBUG)
 
   if not self:odd_pos() then
     self:add_crop()

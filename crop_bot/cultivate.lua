@@ -47,6 +47,10 @@ end
 function Cultivate:cultivate()
   local crop_data = self.crop_bot:analyze_crop()
 
+  if self.crop_bot:is_weed(crop_data) then
+    self.crop_bot:handle_weed()
+  end
+
   local crop_pos = self.crop_bot:pos_str()
   if self.crop_bot:odd_pos() then
     self.crops_parent[crop_pos] = crop_data
@@ -56,18 +60,18 @@ function Cultivate:cultivate()
 end
 
 
-function main()
+function Cultivate.main()
   local length = const.crop_bot.PLOT_LENGTH
   local width = const.crop_bot.PLOT_WIDTH
-  local cultivate = Cultivate:new()
+  local cul = Cultivate:new()
 
   for i=1,2 do
-    cultivate.patrol:patrol(cultivte.cultivate, cultivate, length, width)
+    cul.crop_bot.patrol:patrol(cul.cultivate, cul, length, width)
 
     logging.print("Parents (odd):", const.log_levels.DEBUG)
-    self:print_crop_table(self.crops_parent)
+    cul:print_crop_table(cul.crops_parent)
     logging.print("Children (even):", const.log_levels.DEBUG)
-    self:print_crop_table(self.crops_child)
+    cul:print_crop_table(cul.crops_child)
   end
 
   logging.print("Finished cultivating", const.log_levels.DEBUG)
