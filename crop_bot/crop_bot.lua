@@ -105,9 +105,10 @@ function Crop_Bot:replenish_crops()
   end
 
   self.patrol:travel_pos(const.crop_bot.LOC_CROPS.COORD)
-  move.face_dir(const.crop_LOC_CROPS.DIR)
+  move.face_dir(const.crop_bot.LOC_CROPS.DIR)
 
-  inv.suckFromSlot(sides.front, self.items.ITEM_CROP, 64 - crop_size)
+  local crop_slot = self.items[const.crop_bot.ITEM_CROP]
+  inv.suckFromSlot(sides.front, crop_slot, 64 - crop_size)
   logging.print("Replenished crops", const.log_levels.DEBUG)
 
   self.patrol:travel_prev()
@@ -117,7 +118,7 @@ function Crop_Bot:add_crop()
   self:replenish_crops()
 
   self:equip(const.crop_bot.ITEM_CROP)
-  robot.useDown()
+  bot.useDown()
 
   logging.print("Used crop stick at: "..self:pos_str(), const.log_levels.DEBUG)
 end

@@ -77,7 +77,7 @@ end
 function Patrol:travel_prev()
   self:travel_pos(self.pos_prev, true)
 
-  logging.print("Returned to prev position: "..self.pos_curr, const.log_levels.DEBUG)
+  logging.print("Returned to prev position: "..tostring(self.pos_curr), const.log_levels.DEBUG)
 end
 
 function Patrol:__tostring()
