@@ -56,16 +56,18 @@ function Patrol:travel_x(x, y)
   logging.print(tostring(self), const.log_levels.DEBUG)
 end
 
-function Patrol:travel_pos(coord, save_prev_coord)
+function Patrol:travel_pos(new_coord, save_prev_coord)
+  local new_pos = coord:new(new_coord.x, new_coord.y)
+
   if save_prev_coord then
     self.pos_prev:set_to(self.pos_curr)
   end
 
-  move.travel_pos(self.pos_curr, coord)
+  move.travel_pos(self.pos_curr, new_pos)
 
-  self.pos_curr:set_to(coord)
+  self.pos_curr:set_to(new_pos)
 
-  logging.print("Traveled to: "..tostring(coord), const.log_levels.DEBUG)
+  logging.print("Traveled to: "..tostring(new_pos), const.log_levels.DEBUG)
 end
 
 function Patrol:travel_start()
