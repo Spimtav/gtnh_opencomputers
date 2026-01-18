@@ -88,6 +88,8 @@ end
 
 
 function Patrol:patrol(bot_func, bot_obj, patrol_length, patrol_width)
+  self:travel_start()
+
   for y=0,(patrol_length-1) do
     self:travel_y(y)
 

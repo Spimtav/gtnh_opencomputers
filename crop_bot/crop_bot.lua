@@ -11,9 +11,11 @@ Notes:
 
 
 local bot = require("robot")
+local sides = require("sides")
 local inv = require("component").inventory_controller
 local geo = require("component").geolyzer
-local sides = require("sides")
+local redstone = require("component").redstone
+
 local move = require("move")
 local patrol = require("patrol")
 
@@ -157,10 +159,44 @@ function Crop_Bot:bind_plant()
   logging.print("Bound plant at: "..self:pos_str(), const.log_levels.DEBUG)
 end
 
---[[function Crop_Bot:replace_plant()
+function Crop_Bot:swap_plant(travel_back)
   self:bind_plant()
-  self.patrol:travel_pos(const.crop_bot.LOC_
-end]]
+  self.patrol:travel_pos(const.crop_bot.LOC_DISLOCATOR.POS, true)
+  self.patrol:face_dir(const.crop_bot.LOC_DISLOCATOR.DIR)
+
+  redstone.setOutput(sides.front, 1)
+  redstone.setOutput(sides.front, 0)
+
+  self:equip(const.crop_bot.ITEM_BINDER)
+  bot.use(sides.front)
+
+  if travel_back then
+    self.patrol:travel_prev()
+  end
+
+  logging.print("Swapped plant at: "..self:pos_str(), const.log_levels.DEBUG)
+end
+
+function Crop_Bot:replace_plants(pos_child, pos_parent, travel_back)
+  local pos_original = coord:new(self.patrol.pos_curr.x, self.patrol.pos_curr.y)
+
+  self.patrol:travel_pos(pos_child, true)
+  self:swap_plant()
+  self:add_crop()
+  self:add_crop()
+
+  self.patrol:travel_pos(pos_parent, true)
+  self:equip(const.crop_bot.ITEM_SPADE)
+  bot.swingDown()
+
+  self:swap_plant()
+
+  if travel_back then
+    self.patrol:travel_prev()
+  end
+
+  logging.print("Replaced parent ("..tostring(pos_parent)..") with child ("..tostring(pos_child)..")", const.log_levels.DEBUG)
+end
 
 
 return Crop_Bot
