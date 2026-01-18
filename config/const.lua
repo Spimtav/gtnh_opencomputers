@@ -56,15 +56,15 @@ const.crop_bot = {
   MIN_CROPS = 1,
 
   LOC_CROPS = {
-    COORD = coord:new(0,0),
+    POS = coord:new(0,0),
     DIR = const.W
   },
   LOC_DISLOCATOR = {
-    COORD = coord:new(0,1),
+    POS = coord:new(0,1),
     DIR = const.W
   },
   LOC_SWAP = {
-    COORD = coord:new(0,2),
+    POS = coord:new(0,2),
     DIR = const.W
   },
 

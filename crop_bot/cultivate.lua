@@ -66,6 +66,7 @@ function Cultivate.main()
   local cul = Cultivate:new()
 
   for i=1,2 do
+    cul.crop_bot:clean_bind_dislocator()
     cul.crop_bot.patrol:patrol(cul.cultivate, cul, length, width)
 
     logging.print("Parents (odd):", const.log_levels.DEBUG)

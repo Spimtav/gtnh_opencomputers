@@ -5,6 +5,8 @@ Notes:
   - Equipped: IC2 spade tool
   - Slot 1: Thaumic Tinkerer transvector binder
   - Slot 2: 64x IC2 crop sticks
+- Assumptions:
+  - the Transvector Dislocator is pointed towards the swap plot
 ]]
 
 
@@ -104,7 +106,7 @@ function Crop_Bot:replenish_crops()
     return
   end
 
-  self.patrol:travel_pos(const.crop_bot.LOC_CROPS.COORD)
+  self.patrol:travel_pos(const.crop_bot.LOC_CROPS.POS, true)
   move.face_dir(const.crop_bot.LOC_CROPS.DIR)
 
   local crop_slot = self.items[const.crop_bot.ITEM_CROP]
@@ -133,6 +135,32 @@ function Crop_Bot:handle_weed()
     self:add_crop()
   end
 end
+
+function Crop_Bot:clean_bind_dislocator()
+  self:equip(const.crop_bot.ITEM_BINDER)
+  bot.useDown()
+  bot.useDown()
+  logging.print("Unbound the dislocator", const.log_levels.DEBUG)
+
+  self.patrol:travel_pos(const.crop_bot.LOC_DISLOCATOR.POS, true)
+  move.face_dir(const.crop_bot.LOC_DISLOCATOR.DIR)
+  bot.use(sides.front)
+  logging.print("Bound dislocator", const.log_levels.DEBUG)
+
+  self.patrol:travel_prev()
+end
+
+function Crop_Bot:bind_plant()
+  self:equip(const.crop_bot.ITEM_BINDER)
+  bot.useDown()
+
+  logging.print("Bound plant at: "..self:pos_str(), const.log_levels.DEBUG)
+end
+
+--[[function Crop_Bot:replace_plant()
+  self:bind_plant()
+  self.patrol:travel_pos(const.crop_bot.LOC_
+end]]
 
 
 return Crop_Bot
