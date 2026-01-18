@@ -57,11 +57,11 @@ function Patrol:travel_x(x, y)
 end
 
 function Patrol:travel_pos(coord, save_prev_coord)
-  move.travel_pos(self.pos_curr, coord)
-
   if save_prev_coord then
     self.pos_prev:set_to(self.pos_curr)
   end
+
+  move.travel_pos(self.pos_curr, coord)
 
   self.pos_curr:set_to(coord)
 

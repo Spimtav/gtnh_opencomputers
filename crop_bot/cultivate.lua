@@ -69,10 +69,10 @@ function Cultivate.main()
     cul.crop_bot:clean_bind_dislocator()
     cul.crop_bot.patrol:patrol(cul.cultivate, cul, length, width)
 
-    logging.print("Parents (odd):", const.log_levels.DEBUG)
-    cul:print_crop_table(cul.crops_parent)
-    logging.print("Children (even):", const.log_levels.DEBUG)
-    cul:print_crop_table(cul.crops_child)
+    --logging.print("Parents (odd):", const.log_levels.DEBUG)
+    --cul:print_crop_table(cul.crops_parent)
+    --logging.print("Children (even):", const.log_levels.DEBUG)
+    --cul:print_crop_table(cul.crops_child)
   end
 
   logging.print("Finished cultivating", const.log_levels.DEBUG)
