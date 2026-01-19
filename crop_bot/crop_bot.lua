@@ -105,6 +105,13 @@ function Crop_Bot:is_empty(crop_data)
   return crop_data[const.crop_bot.PLANT_NAME] == const.crop_bot.PLANT_AIR
 end
 
+function Crop_Bot:is_mature(crop_data)
+  local size_curr = crop_data[const.crop_bot.PLANT_SIZE]
+  local size_max = crop_data[const.crop_bot.PLANT_SIZE_MAX]
+
+  return size_curr == size_max
+end
+
 function Crop_Bot:analyze_crop()
   return geo.analyze(const.FACINGS[const.D])
 end
@@ -191,22 +198,38 @@ end
 function Crop_Bot:replace_plants(pos_child, pos_parent, travel_back)
   local pos_original = coord:new(self.patrol.pos_curr.x, self.patrol.pos_curr.y)
 
-  self.patrol:travel_pos(pos_child, true)
-  self:swap_plant()
+  self.patrol:travel_pos(pos_child, false)
+  self:swap_plant(false)
   self:add_crop()
   self:add_crop()
 
-  self.patrol:travel_pos(pos_parent, true)
+  self.patrol:travel_pos(pos_parent, false)
   self:equip(const.crop_bot.ITEM_SPADE)
   bot.swingDown()
 
-  self:swap_plant()
+  self:swap_plant(false)
 
   if travel_back then
-    self.patrol:travel_prev()
+    self.patrol:travel_pos(pos_original, true)
   end
 
   logging.print("Replaced parent ("..tostring(pos_parent)..") with child ("..tostring(pos_child)..")", const.log_levels.DEBUG)
+end
+
+function Crop_Bot:pluck_child()
+  self:equip(const.crop_bot.ITEM_SPADE)
+
+  local data_child = self:analyze_crop()
+  if self:is_mature(data_child) then
+    bot.swingDown()
+    self:add_crop()
+    self:add_crop()
+  else
+    bot.useDown()
+    self:add_crop()
+  end
+
+  logging.print("Plucked child at: "..self:pos_str(), const.log_levels.DEBUG)
 end
 
 

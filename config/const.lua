@@ -22,7 +22,7 @@ for k,v in pairs(const.log_levels) do
   const.log_level_names[v] = k
 end
 
-const.STACK_SIZE_MAX = 64
+const.STACK_MAX = 64
 
 const.N = "N"
 const.S = "S"
@@ -80,6 +80,8 @@ const.crop_bot = {
   PLANT_GROWTH = "crop:growth",
   PLANT_GAIN = "crop:gain",
   PLANT_RESIST = "crop:resistance",
+  PLANT_SIZE = "crop:size",
+  PLANT_SIZE_MAX = "crop:maxSize",
 
   PLANT_WEED = "weed",
   PLANT_AIR = nil
