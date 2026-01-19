@@ -162,7 +162,7 @@ end
 function Crop_Bot:swap_plant(travel_back)
   self:bind_plant()
   self.patrol:travel_pos(const.crop_bot.LOC_DISLOCATOR.POS, true)
-  self.patrol:face_dir(const.crop_bot.LOC_DISLOCATOR.DIR)
+  move.face_dir(const.crop_bot.LOC_DISLOCATOR.DIR)
 
   redstone.setOutput(sides.front, 1)
   redstone.setOutput(sides.front, 0)
