@@ -177,7 +177,7 @@ function Crop_Bot:bind_plant()
   logging.print("Bound plant at: "..self:pos_str(), const.log_levels.DEBUG)
 end
 
-function Crop_Bot:swap_plant(travel_back)
+function Crop_Bot:swap_plant()
   self:bind_plant()
   self.patrol:travel_pos(const.crop_bot.LOC_DISLOCATOR.POS, true)
   move.face_dir(const.crop_bot.LOC_DISLOCATOR.DIR)
@@ -188,30 +188,23 @@ function Crop_Bot:swap_plant(travel_back)
   self:equip(const.crop_bot.ITEM_BINDER)
   bot.use(sides.front)
 
-  if travel_back then
-    self.patrol:travel_prev()
-  end
-
   logging.print("Swapped plant at: "..self:pos_str(), const.log_levels.DEBUG)
 end
 
-function Crop_Bot:replace_plants(pos_child, pos_parent, travel_back)
+function Crop_Bot:replace_plants(pos_child, pos_parent)
   local pos_original = coord:new(self.patrol.pos_curr.x, self.patrol.pos_curr.y)
 
-  self.patrol:travel_pos(pos_child, false)
-  self:swap_plant(false)
+  self.patrol:travel_pos(pos_child, true)
+  self:swap_plant()
+  self.patrol:travel_pos(pos_child, true)
   self:add_crop()
   self:add_crop()
 
-  self.patrol:travel_pos(pos_parent, false)
+  self.patrol:travel_pos(pos_parent, true)
   self:equip(const.crop_bot.ITEM_SPADE)
   bot.swingDown()
 
-  self:swap_plant(false)
-
-  if travel_back then
-    self.patrol:travel_pos(pos_original, true)
-  end
+  self:swap_plant()
 
   logging.print("Replaced parent ("..tostring(pos_parent)..") with child ("..tostring(pos_child)..")", const.log_levels.DEBUG)
 end
