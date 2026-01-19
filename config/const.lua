@@ -22,6 +22,7 @@ for k,v in pairs(const.log_levels) do
   const.log_level_names[v] = k
 end
 
+const.STACK_SIZE_MAX = 64
 
 const.N = "N"
 const.S = "S"

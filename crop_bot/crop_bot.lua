@@ -7,6 +7,8 @@ Notes:
   - Slot 2: 64x IC2 crop sticks
 - Assumptions:
   - the Transvector Dislocator is pointed towards the swap plot
+  - there are enough Advanced Item Collectors around the plot to automatically
+    suck up and deposit items into your AE2 system / other storage
 ]]
 
 
@@ -72,6 +74,15 @@ function Crop_Bot:equip(item)
   self.items[swapped_item] = item_slot
 end
 
+function Crop_Bot:drop_all_misc()
+  for i=1,const.crop_bot.INV_SIZE do
+    if self.inv[i] == nil then
+      bot.select(i)
+      bot.drop(const.STACK_MAX)
+    end
+  end
+end
+
 -- Planting Checks
 function Crop_Bot:crop_stat_str(stat_table)
   if stat_table == nil then
@@ -112,7 +123,7 @@ function Crop_Bot:replenish_crops()
   move.face_dir(const.crop_bot.LOC_CROPS.DIR)
 
   local crop_slot = self.items[const.crop_bot.ITEM_CROP]
-  inv.suckFromSlot(sides.front, crop_slot, 64 - crop_size)
+  inv.suckFromSlot(sides.front, crop_slot, const.STACK_MAX - crop_size)
   logging.print("Replenished crops", const.log_levels.DEBUG)
 
   self.patrol:travel_prev()
