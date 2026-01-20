@@ -8,7 +8,7 @@ if Coord then return end
 
 local Coord = {}
 
-function Coord:new(x,y)
+function Coord:new(x, y)
   local coord = {
     x = x,
     y = y
@@ -16,6 +16,14 @@ function Coord:new(x,y)
   setmetatable(coord, self)
   self.__index = self
   return coord
+end
+
+function Coord:new_from_str(s)
+  local _, _, str_x, str_y = s:find("{(%d+),(%d+)}")
+  local x = tonumber(x)
+  local y = tonumber(y)
+
+  return Coord:new(x, y)
 end
 
 function Coord:set_to(coord)

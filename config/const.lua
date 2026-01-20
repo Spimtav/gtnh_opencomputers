@@ -82,9 +82,12 @@ const.crop_bot = {
   PLANT_RESIST = "crop:resistance",
   PLANT_SIZE = "crop:size",
   PLANT_SIZE_MAX = "crop:maxSize",
+  BLOCK_NAME = "name",
 
-  PLANT_WEED = "weed",
-  PLANT_AIR = nil
+  PLANT_NAME_WEED = "weed",
+  PLANT_NAME_EMPTY = nil,
+  BLOCK_NAME_CROP = "IC2:blockCrop",
+  BLOCK_NAME_AIR = "minecraft:air"
 }
 
 const.crop_bot.cultivate = {

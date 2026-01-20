@@ -6,6 +6,7 @@ Notes:
   - Slot 1: Thaumic Tinkerer transvector binder
   - Slot 2: 64x IC2 crop sticks
 - Assumptions:
+  - parents are odd-summed coords, children are even
   - the Transvector Dislocator is pointed towards the swap plot
   - there are enough Advanced Item Collectors around the plot to automatically
     suck up and deposit items into your AE2 system / other storage
@@ -45,7 +46,8 @@ function Crop_Bot:new()
 end
 
 
--- Position
+-------------------------------- Position --------------------------------------
+
 function Crop_Bot:pos_str()
   return tostring(self.patrol.pos_curr)
 end
@@ -57,7 +59,8 @@ function Crop_Bot:odd_pos()
   return (x+y % 2) == 1
 end
 
--- Inventory
+------------------------------- Inventory --------------------------------------
+
 function Crop_Bot:equip(item)
   local item_slot = self.items[item]
   if item_slot == const.crop_bot.ITEM_EQUIPPED then
@@ -74,40 +77,49 @@ function Crop_Bot:equip(item)
   self.items[swapped_item] = item_slot
 end
 
-function Crop_Bot:drop_all_misc()
+function Crop_Bot:eject_all_misc()
   for i=1,const.crop_bot.INV_SIZE do
     if self.inv[i] == nil then
       bot.select(i)
       bot.drop(const.STACK_MAX)
     end
   end
+
+  logging.print("Ejected inventory", const.logging.DEBUG)
 end
 
--- Planting Checks
-function Crop_Bot:crop_stat_str(stat_table)
-  if stat_table == nil then
-    return "-"
-  end
+---------------------------- Planting Checks -----------------------------------
 
-  local name = stat_table["crop:name"]
-  local growth = stat_table["crop:growth"]
-  local gain = stat_table["crop:gain"]
-  local resistance = stat_table["crop:resistance"]
-
-  return name..": "..growth..","..gain..","..resistance
+function Crop_Bot:is_weed(scan_data)
+  return scan_data[const.crop_bot.PLANT_NAME] == const.crop_bot.PLANT_NAME_WEED
 end
 
-function Crop_Bot:is_weed(crop_data)
-  return crop_data[const.crop_bot.PLANT_NAME] == const.crop_bot.PLANT_WEED
+function Crop_Bot:is_air(scan_data)
+  return scan_data[const.crop_bot.BLOCK_NAME] == const.crop_bot.BLOCK_NAME_AIR
 end
 
-function Crop_Bot:is_empty(crop_data)
-  return crop_data[const.crop_bot.PLANT_NAME] == const.crop_bot.PLANT_AIR
+function Crop_Bot:is_crop(scan_data)
+  return scan_data[const.crop_bot.BLOCK_NAME] == const.crop_bot.BLOCK_NAME_CROP
 end
 
-function Crop_Bot:is_mature(crop_data)
-  local size_curr = crop_data[const.crop_bot.PLANT_SIZE]
-  local size_max = crop_data[const.crop_bot.PLANT_SIZE_MAX]
+function Crop_Bot:is_empty_crop(scan_data)
+  local crop = self:is_crop(scan_data)
+  local is_empty = scan_data[const.crop_bot.PLANT_NAME] == const.crop_bot.PLANT_NAME_EMPTY
+
+  return crop and is_empty
+end
+
+function Crop_Bot:is_plant(scan_data)
+  local crop = self:is_crop(scan_data)
+  local empty = self:is_empty_crop(scan_data)
+  local weed = self:is_weed(scan_data)
+
+  return crop and (not empty) and (not weed)
+end
+
+function Crop_Bot:is_mature(scan_data)
+  local size_curr = scan_data[const.crop_bot.PLANT_SIZE]
+  local size_max = scan_data[const.crop_bot.PLANT_SIZE_MAX]
 
   return size_curr == size_max
 end
@@ -116,7 +128,53 @@ function Crop_Bot:analyze_crop()
   return geo.analyze(const.FACINGS[const.D])
 end
 
--- Planting Actions
+------------------------------ Plant Stats -------------------------------------
+
+function Crop_Bot:plant_stats(plant_data)
+  local growth = plant_data[const.crop_bot.PLANT_GROWTH]
+  local gain = plant_data[const.crop_bot.PLANT_GAIN]
+  local resist = plant_data[const.crop_bot.PLANT_RESIST]
+
+  return growth, gain, resist
+end
+
+function Crop_Bot:stat_diff(data_child, data_parent, stat_str)
+  local stat_child = data_child[stat_str]
+  local stat_parent = data_parent[stat_str]
+
+  return stat_child - stat_parent
+end
+
+------------------------------ Serializers -------------------------------------
+
+function Crop_Bot:stat_str(scan_data)
+  if scan_data == nil then
+    return "-"
+  end
+
+  if self:is_air(scan_data) then
+    return "air"
+  elseif self:is_weed(scan_data) then
+    return "weed"
+  elseif self:is_empty_crop(scan_data) then
+    return "crop"
+  end
+
+  local name = scan_data[const.crop_bot.PLANT_NAME]
+  local growth, gain, resist = self:plant_stats(scan_data)
+
+  return name..","..tostring(growth)..","..tostring(gain)..","..tostring(resist)
+end
+
+function Crop_Bot:full_data_str(pos, scan_data)
+  local str_pos = tostring(pos)
+  local str_stats = self:stat_str(scan_data)
+
+  return str_pos..":"..str_stats
+end
+
+---------------------------- Planting Actions ----------------------------------
+
 function Crop_Bot:replenish_crops()
   self:equip(const.crop_bot.ITEM_SPADE)
 
@@ -150,6 +208,14 @@ function Crop_Bot:handle_weed()
   self:equip(const.crop_bot.ITEM_SPADE)
   bot.useDown()
   logging.print("Removed weed at: "..self:pos_str(), const.log_levels.DEBUG)
+
+  if not self:odd_pos() then
+    self:add_crop()
+  end
+end
+
+function Crop_Bot:handle_air()
+  self:add_crop()
 
   if not self:odd_pos() then
     self:add_crop()
@@ -191,7 +257,7 @@ function Crop_Bot:swap_plant()
   logging.print("Swapped plant at: "..self:pos_str(), const.log_levels.DEBUG)
 end
 
-function Crop_Bot:replace_plants(pos_child, pos_parent)
+function Crop_Bot:replace_plants(pos_child, pos_parent, data_child, data_parent)
   local pos_original = coord:new(self.patrol.pos_curr.x, self.patrol.pos_curr.y)
 
   self.patrol:travel_pos(pos_child, true)
@@ -206,23 +272,34 @@ function Crop_Bot:replace_plants(pos_child, pos_parent)
 
   self:swap_plant()
 
-  logging.print("Replaced parent ("..tostring(pos_parent)..") with child ("..tostring(pos_child)..")", const.log_levels.DEBUG)
+  local str_parent = self:full_data_str(pos_parent, data_parent)
+  local str_child = self:full_data_str(pos_child, data_child)
+  logging.print("Replaced parent ("..str_parent..") with child ("..str_child..")", const.log_levels.INFO)
 end
 
-function Crop_Bot:pluck_child()
+function Crop_Bot:pluck_child(pos_child, fail_reason)
   self:equip(const.crop_bot.ITEM_SPADE)
 
+  self.patrol:travel_pos(pos_child, true)
+
   local data_child = self:analyze_crop()
-  if self:is_mature(data_child) then
-    bot.swingDown()
-    self:add_crop()
-    self:add_crop()
-  else
+
+  if not self:is_mature(data_child) then
     bot.useDown()
-    self:add_crop()
   end
 
-  logging.print("Plucked child at: "..self:pos_str(), const.log_levels.DEBUG)
+  bot.swingDown()
+  self:handle_air()
+
+  local str_child = self:full_data_str(pos_child, data_child)
+  logging.print("Plucked child ("..str_child.."): "..fail_reason, const.log_levels.DEBUG)
+end
+
+function Crop_Bot:clear_plot()
+  self:equip(const.crop_bot.ITEM_SPADE)
+  bot.swingDown()
+
+  logging.print("Cleared plot at: "..self:pos_str(), const.log_levels.DEBUG)
 end
 
 
