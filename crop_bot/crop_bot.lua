@@ -59,7 +59,7 @@ function Crop_Bot:odd_pos()
   return (x+y % 2) == 1
 end
 
-function Crop_bot:num_odds()
+function Crop_Bot:num_odds()
   local area = const.crop_bot.PLOT_LENGTH * const.crop_bot.PLOT_WIDTH
 
   return math.floor(area / 2)
