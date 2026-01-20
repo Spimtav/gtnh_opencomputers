@@ -66,6 +66,8 @@ end
 function Cultivate:valid_child(data_child)
   if not self.crop_bot:is_plant(data_child) then
     return false, "not a plant"
+  elseif not self.crop_bot:same_species(data_child, const.crop_bot.cultivate.SPECIES) then
+    return false, "wrong species"
   end
 
   local growth, gain, resist = self.crop_bot:plant_stats(data_child)
@@ -245,7 +247,7 @@ function Cultivate:cultivate()
 
     for pos_str_child, data_child in pairs(self.data_childs) do
       local pos_child = coord:new_from_str(pos_str_child)
-      local valid, fail_reason = self.crop_bot:valid_child(data_child)
+      local valid, fail_reason = self:valid_child(data_child)
 
       if not self.crop_bot:is_plant(data_child) then
         logging.print("Ignoring empty child at: "..pos_str_child, const.log_levels.DEBUG)

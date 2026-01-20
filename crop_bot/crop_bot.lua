@@ -130,6 +130,12 @@ function Crop_Bot:is_mature(scan_data)
   return size_curr == size_max
 end
 
+function: Crop_Bot:same_species(scan_data, species)
+  local name = scan_data[const.crop_bot.PLANT_NAME]
+
+  return name == species
+end
+
 function Crop_Bot:analyze_crop()
   return geo.analyze(const.FACINGS[const.D])
 end
