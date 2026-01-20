@@ -4,9 +4,8 @@ Notes:
 - I basically just need this so i can override __tostring()
 ]]
 
-if Coord then return end
-
 local Coord = {}
+
 
 function Coord:new(x, y)
   local coord = {
@@ -20,8 +19,8 @@ end
 
 function Coord:new_from_str(s)
   local _, _, str_x, str_y = s:find("{(%d+),(%d+)}")
-  local x = tonumber(x)
-  local y = tonumber(y)
+  local x = tonumber(str_x)
+  local y = tonumber(str_y)
 
   return Coord:new(x, y)
 end

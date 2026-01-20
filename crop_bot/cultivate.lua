@@ -20,6 +20,7 @@ Notes:
 ]]
 
 
+coord = require("coord")
 crop_bot = require("crop_bot")
 
 
@@ -40,7 +41,7 @@ function Cultivate:new()
     num_maxed_parents = 0,
     num_loops = 0
   }
-  crop_bot[num_parents] = crop_bot[crop_bot]:num_odds()
+  new_cul["num_parents"] = new_cul["crop_bot"]:num_odds()
   setmetatable(new_cul, self)
   self.__index = self
   return new_cul
