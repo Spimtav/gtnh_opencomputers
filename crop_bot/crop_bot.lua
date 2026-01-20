@@ -56,7 +56,7 @@ function Crop_Bot:odd_pos()
   local x = self.patrol.pos_curr.x
   local y = self.patrol.pos_curr.y
 
-  return (x+y % 2) == 1
+  return ((x+y) % 2) == 1
 end
 
 function Crop_Bot:num_odds()
@@ -130,7 +130,7 @@ function Crop_Bot:is_mature(scan_data)
   return size_curr == size_max
 end
 
-function: Crop_Bot:same_species(scan_data, species)
+function Crop_Bot:same_species(scan_data, species)
   local name = scan_data[const.crop_bot.PLANT_NAME]
 
   return name == species
