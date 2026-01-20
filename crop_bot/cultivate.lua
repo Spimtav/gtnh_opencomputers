@@ -74,6 +74,7 @@ function Cultivate:valid_child(data_child)
 
   local max_growth = const.crop_bot.cultivate.MAX_GROWTH
   local max_gain = const.crop_bot.cultivate.MAX_GAIN
+  local max_resist = const.crop_bot.cultivate.MAX_RESIST
 
   local valid_growth = (growth <= max_growth) and (growth >= self.min_growth)
   if not valid_growth then
@@ -87,7 +88,7 @@ function Cultivate:valid_child(data_child)
 
   local valid_resist = resist <= self.max_resist
   if not valid_resist then
-    return false, "invalid resist "..self:invalid_reason_str(self.min_resist, resist, max_resist)
+    return false, "invalid resist "..self:invalid_reason_str(self.max_resist, resist, max_resist)
   end
 
   return true, nil
@@ -148,9 +149,9 @@ function Cultivate:plant_maxed(data)
 
   local max_growth = const.crop_bot.cultivate.MAX_GROWTH
   local max_gain = const.crop_bot.cultivate.MAX_GAIN
-  local min_resist = const.crop_bot.cultivate.MIN_RESIST
+  local max_resist = const.crop_bot.cultivate.MAX_RESIST
 
-  return (growth == max_growth) and (gain == max_gain) and (resist == min_resist)
+  return (growth == max_growth) and (gain == max_gain) and (resist == max_resist)
 end
 
 function Cultivate:parents_maxed()
