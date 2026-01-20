@@ -36,14 +36,15 @@ function Cultivate:new()
     min_growth = 99,
     min_gain = 99,
     max_resist = -99,
+    num_parents = 0,
     num_maxed_parents = 0,
     num_loops = 0
   }
+  crop_bot[num_parents] = crop_bot[crop_bot]:num_odds()
   setmetatable(new_cul, self)
   self.__index = self
   return new_cul
 end
-
 
 function Cultivate:print_data_table(data_table)
   for pos_str, scan_data in pairs(data_table) do
@@ -128,7 +129,7 @@ function Cultivate:lowest_parent(data_child)
   end
 
   local fail_reason = nil
-  if num_regressions == #self.data_parents then
+  if num_regressions == self.num_parents then
     fail_reason = "regression"
   elseif lowest_parent_key == nil then
     fail_reason = "no improvement"
@@ -144,13 +145,17 @@ function Cultivate:plant_maxed(data)
 
   local max_growth = const.crop_bot.cultivate.MAX_GROWTH
   local max_gain = const.crop_bot.cultivate.MAX_GAIN
-  local min_resist = 0
+  local min_resist = const.crop_bot.cultivate.MIN_RESIST
 
   return (growth == max_growth) and (gain == max_gain) and (resist == min_resist)
 end
 
 function Cultivate:parents_maxed()
-  return self.num_maxed_parents == #self.data_parents
+  if self.num_loops == 0 then
+    return false
+  end
+
+  return self.num_maxed_parents == self.num_parents
 end
 
 ----------------------------------- Cultivation --------------------------------
@@ -201,8 +206,8 @@ function Cultivate:handle_parent_stats()
   self.num_maxed_parents = num_maxed
 
   local stat_str = tostring(self.min_growth)..","..tostring(self.min_gain)..","..tostring(self.max_resist)
-  local maxed_str = tostring(self.num_maxed_parents).."/"..tostring(#self.data_parents)
-  logging.print("Parent floors: "..stat_str.. "("..maxed_str..")", const.logging.INFO)
+  local maxed_str = tostring(self.num_maxed_parents).."/"..tostring(self.num_parents)
+  logging.print("Parent floors: "..stat_str.. "("..maxed_str..")", const.log_levels.INFO)
 end
 
 function Cultivate:handle_replacement(pos_child, data_child)
@@ -232,7 +237,7 @@ function Cultivate:cultivate()
   while not self:parents_maxed() do
     self.num_loops = self.num_loops + 1
 
-    logging.print("Loop "..tostring(self.num_loops), const.logging.INFO)
+    logging.print("Loop "..tostring(self.num_loops), const.log_levels.INFO)
 
     self.crop_bot.patrol:patrol(self.handle_patrol, self, length, width)
     self:handle_parent_stats()
@@ -242,7 +247,7 @@ function Cultivate:cultivate()
       local valid, fail_reason = self.crop_bot:valid_child(data_child)
 
       if not self.crop_bot:is_plant(data_child) then
-        logging.print("Ignoring empty child at: "..pos_str_child, const.logging.DEBUG)
+        logging.print("Ignoring empty child at: "..pos_str_child, const.log_levels.DEBUG)
       elseif not valid then
         self.crop_bot:pluck_child(pos_child, fail_reason)
       else
@@ -250,9 +255,7 @@ function Cultivate:cultivate()
       end
     end
 
-    self.crop_bot:eject_all_misc()
-
-    logging.print("\n"..string.rep("_", 30), const.logging.INFO)
+    logging.print("\n"..string.rep("_", 30), const.log_levels.INFO)
   end
 
   self.crop_bot.patrol:patrol(self.handle_cleanup, self, length, width)

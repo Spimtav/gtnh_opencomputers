@@ -92,7 +92,8 @@ const.crop_bot = {
 
 const.crop_bot.cultivate = {
   MAX_GROWTH = 21,
-  MAX_GAIN = 31
+  MAX_GAIN = 31,
+  MIN_RESIST = 0
 }
 
 

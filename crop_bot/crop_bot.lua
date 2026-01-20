@@ -59,6 +59,12 @@ function Crop_Bot:odd_pos()
   return (x+y % 2) == 1
 end
 
+function Crop_bot:num_odds()
+  local area = const.crop_bot.PLOT_LENGTH * const.crop_bot.PLOT_WIDTH
+
+  return math.floor(area / 2)
+end
+
 ------------------------------- Inventory --------------------------------------
 
 function Crop_Bot:equip(item)
@@ -85,7 +91,7 @@ function Crop_Bot:eject_all_misc()
     end
   end
 
-  logging.print("Ejected inventory", const.logging.DEBUG)
+  logging.print("Ejected inventory", const.log_levels.DEBUG)
 end
 
 ---------------------------- Planting Checks -----------------------------------
