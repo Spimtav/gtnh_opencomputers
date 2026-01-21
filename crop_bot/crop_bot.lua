@@ -234,10 +234,18 @@ function Crop_Bot:handle_air()
   end
 end
 
-function Crop_Bot:clean_bind_dislocator()
+function Crop_Bot:bind_plant()
   self:equip(const.crop_bot.ITEM_BINDER)
-  bot.useDown()
-  bot.useDown()
+
+  -- Sneaking needed bc harvesting takes normal right-click priority over binding
+  bot.use(const.FACINGS[const.D], true)
+
+  logging.print("Bound plant at: "..self:pos_str(), const.log_levels.DEBUG)
+end
+
+function Crop_Bot:clean_bind_dislocator()
+  self:bind_plant()
+  self:bind_plant()
   logging.print("Unbound the dislocator", const.log_levels.DEBUG)
 
   self.patrol:travel_pos(const.crop_bot.LOC_DISLOCATOR.POS, true)
@@ -246,15 +254,6 @@ function Crop_Bot:clean_bind_dislocator()
   logging.print("Bound dislocator", const.log_levels.DEBUG)
 
   self.patrol:travel_prev()
-end
-
-function Crop_Bot:bind_plant()
-  self:equip(const.crop_bot.ITEM_BINDER)
-
-  -- Sneaking needed bc harvesting takes normal right-click priority over binding
-  bot.use(const.FACINGS[const.D], true)
-
-  logging.print("Bound plant at: "..self:pos_str(), const.log_levels.DEBUG)
 end
 
 function Crop_Bot:swap_plant()
