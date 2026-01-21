@@ -244,8 +244,12 @@ function Crop_Bot:bind_plant()
 end
 
 function Crop_Bot:clean_bind_dislocator()
-  self:bind_plant()
-  self:bind_plant()
+  self.patrol:travel_pos(const.crop_bot.LOC_CROPS.POS, true)
+  move.face_dir(const.crop_bot.LOC_CROPS.DIR)
+
+  self:equip(const.crop_bot.ITEM_BINDER)
+  bot.use(sides.front, true)
+  bot.use(sides.front, true)
   logging.print("Unbound the dislocator", const.log_levels.DEBUG)
 
   self.patrol:travel_pos(const.crop_bot.LOC_DISLOCATOR.POS, true)
