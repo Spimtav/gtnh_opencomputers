@@ -192,7 +192,7 @@ function Cultivate:handle_parent_stats()
   local num_maxed = 0
 
   for _, data_parent in pairs(self.data_parents) do
-    local growth, gain, resist = self.crop_bot:plant_stats(data_parents)
+    local growth, gain, resist = self.crop_bot:plant_stats(data_parent)
 
     self.min_growth = math.min(growth, self.min_growth)
     self.min_gain = math.min(gain, self.min_gain)
