@@ -58,14 +58,14 @@ const.crop_bot = {
 
   LOC_CROPS = {
     POS = coord:new(0,0),
-    DIR = const.W
+    DIR = const.S
   },
   LOC_DISLOCATOR = {
-    POS = coord:new(0,1),
+    POS = coord:new(0,4),
     DIR = const.W
   },
   LOC_SWAP = {
-    POS = coord:new(0,2),
+    POS = coord:new(0,5),
     DIR = const.W
   },
 
@@ -94,7 +94,7 @@ const.crop_bot.cultivate = {
   MAX_GROWTH = 21,
   MAX_GAIN = 31,
   MAX_RESIST = 0,
-  SPECIES = "Glowshroom"
+  SPECIES = "stickreed"
 }
 
 
