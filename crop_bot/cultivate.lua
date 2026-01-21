@@ -143,9 +143,7 @@ function Cultivate:lowest_parent(data_child)
 end
 
 function Cultivate:plant_maxed(data)
-  local growth = data[const.crop_bot.PLANT_GROWTH]
-  local gain = data[const.crop_bot.PLANT_GAIN]
-  local resist = data[const.crop_bot.PLANT_RESIST]
+  local growth, gain, resist = self.crop_bot:plant_stats(data)
 
   local max_growth = const.crop_bot.cultivate.MAX_GROWTH
   local max_gain = const.crop_bot.cultivate.MAX_GAIN
@@ -194,9 +192,7 @@ function Cultivate:handle_parent_stats()
   local num_maxed = 0
 
   for _, data_parent in pairs(self.data_parents) do
-    local growth = data_parent[const.crop_bot.PLANT_GROWTH]
-    local gain = data_parent[const.crop_bot.PLANT_GAIN]
-    local resist = data_parent[const.crop_bot.PLANT_RESIST]
+    local growth, gain, resist = self.crop_bot:plant_stats(data_parents)
 
     self.min_growth = math.min(growth, self.min_growth)
     self.min_gain = math.min(gain, self.min_gain)

@@ -250,7 +250,9 @@ end
 
 function Crop_Bot:bind_plant()
   self:equip(const.crop_bot.ITEM_BINDER)
-  bot.useDown()
+
+  -- Sneaking needed bc harvesting takes normal right-click priority over binding
+  bot.use(const.FACINGS[const.D], true)
 
   logging.print("Bound plant at: "..self:pos_str(), const.log_levels.DEBUG)
 end
@@ -270,8 +272,6 @@ function Crop_Bot:swap_plant()
 end
 
 function Crop_Bot:replace_plants(pos_child, pos_parent, data_child, data_parent)
-  local pos_original = coord:new(self.patrol.pos_curr.x, self.patrol.pos_curr.y)
-
   self.patrol:travel_pos(pos_child, true)
   self:swap_plant()
   self.patrol:travel_pos(pos_child, true)
