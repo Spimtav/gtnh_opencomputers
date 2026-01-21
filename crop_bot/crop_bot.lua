@@ -256,8 +256,11 @@ function Crop_Bot:clean_bind_dislocator()
   self.patrol:travel_prev()
 end
 
-function Crop_Bot:swap_plant()
-  self:bind_plant()
+function Crop_Bot:swap_plant(binding_needed)
+  if binding_needed then
+    self:bind_plant()
+  end
+
   self.patrol:travel_pos(const.crop_bot.LOC_DISLOCATOR.POS, true)
   move.face_dir(const.crop_bot.LOC_DISLOCATOR.DIR)
 
@@ -272,43 +275,48 @@ end
 
 function Crop_Bot:replace_plants(pos_child, pos_parent, data_child, data_parent)
   self.patrol:travel_pos(pos_child, true)
-  self:swap_plant()
+  self:swap_plant(true)
   self.patrol:travel_pos(pos_child, true)
   self:add_crop()
   self:add_crop()
 
   self.patrol:travel_pos(pos_parent, true)
-  self:equip(const.crop_bot.ITEM_SPADE)
-  bot.swingDown()
-
-  self:swap_plant()
+  self:bind_plant()
+  self:pluck_plant(false)
+  self:swap_plant(false)
 
   local str_parent = self:full_data_str(pos_parent, data_parent)
   local str_child = self:full_data_str(pos_child, data_child)
   logging.print("Replaced parent ("..str_parent..") with child ("..str_child..")", const.log_levels.INFO)
 end
 
-function Crop_Bot:pluck_child(pos_child, fail_reason)
+function Crop_Bot:pluck_plant(replace_crops)
   self:equip(const.crop_bot.ITEM_SPADE)
 
-  self.patrol:travel_pos(pos_child, true)
+  local scan_data = self:analyze_crop()
 
-  local data_child = self:analyze_crop()
-
-  if not self:is_mature(data_child) then
+  if not self:is_mature(scan_data) then
     bot.useDown()
   end
 
   bot.swingDown()
-  self:handle_air()
+
+  if replace_crops then
+    self:handle_air()
+  end
+end
+
+function Crop_Bot:pluck_child(pos_child, data_child, fail_reason)
+  self.patrol:travel_pos(pos_child, true)
+
+  self:pluck_plant(true)
 
   local str_child = self:full_data_str(pos_child, data_child)
   logging.print("Plucked child ("..str_child.."): "..fail_reason, const.log_levels.DEBUG)
 end
 
 function Crop_Bot:clear_plot()
-  self:equip(const.crop_bot.ITEM_SPADE)
-  bot.swingDown()
+  self:pluck_plant(false)
 
   logging.print("Cleared plot at: "..self:pos_str(), const.log_levels.DEBUG)
 end

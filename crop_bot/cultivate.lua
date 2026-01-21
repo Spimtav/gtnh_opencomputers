@@ -214,7 +214,7 @@ function Cultivate:handle_replacement(pos_child, data_child)
   local pos_str_lowest_parent, fail_reason = self:lowest_parent(data_child)
 
   if pos_str_lowest_parent == nil then
-    self.crop_bot:pluck_child(pos_child, fail_reason)
+    self.crop_bot:pluck_child(pos_child, data_child, fail_reason)
   else
     local pos_lowest_parent = coord:new_from_str(pos_str_lowest_parent)
     self.crop_bot:replace_plants(pos_child, pos_lowest_parent, data_child, data_lowest_parent)
@@ -249,7 +249,7 @@ function Cultivate:cultivate()
       if not self.crop_bot:is_plant(data_child) then
         logging.print("Ignoring empty child at: "..pos_str_child, const.log_levels.DEBUG)
       elseif not valid then
-        self.crop_bot:pluck_child(pos_child, fail_reason)
+        self.crop_bot:pluck_child(pos_child, data_child, fail_reason)
       else
         self:handle_replacement(pos_child, data_child)
       end
