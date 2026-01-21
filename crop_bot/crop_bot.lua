@@ -13,6 +13,7 @@ Notes:
 ]]
 
 
+local os = require("os")
 local bot = require("robot")
 local sides = require("sides")
 local inv = require("component").inventory_controller
@@ -278,16 +279,35 @@ function Crop_Bot:swap_plant(binding_needed)
 end
 
 function Crop_Bot:replace_plants(pos_child, pos_parent, data_child, data_parent)
+  print("In replace plants, gonna replace these chumpolas:")
+  print("    child: "..self:full_data_str(pos_child, data_child))
+  print("    parent: "..self:full_data_str(pos_parent, data_parent))
+
   self.patrol:travel_pos(pos_child, true)
+  print("at "..tostring(pos_child)..", about to swap this ungainly child in 10 sec")
+  os.sleep(10)
   self:swap_plant(true)
+  print("swapped child, is it in the swap plot and is child now empty?  sleeping 10 to check")
+  os.sleep(10)
   self.patrol:travel_pos(pos_child, true)
+  print("we're back at hopefully "..tostring(pos_child)..", adding 2 crops then sleeping 20")
   self:add_crop()
   self:add_crop()
+  os.sleep(20)
 
   self.patrol:travel_pos(pos_parent, true)
+  print("Now we're at parent pos "..tostring(pos_parent).." and gonna bind it in 10")
+  os.sleep(10)
   self:bind_plant()
+  print("we have bound it hopefully, and will pluck in 10")
+  os.sleep(10)
   self:pluck_plant(false)
+  print("the parent should be plucked and empty now, will swap with child in 20")
+  os.sleep(20)
   self:swap_plant(false)
+  print("replacements done, check: dislocator same spot; swap plot empty; child plot has 2 crops; child in parent")
+  print("pausing 30 before continuing")
+  os.sleep(30)
 
   local str_parent = self:full_data_str(pos_parent, data_parent)
   local str_child = self:full_data_str(pos_child, data_child)

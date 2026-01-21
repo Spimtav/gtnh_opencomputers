@@ -213,6 +213,7 @@ end
 function Cultivate:handle_replacement(pos_child, data_child)
   local pos_str_lowest_parent, fail_reason = self:lowest_parent(data_child)
 
+  print("attempting to replace: "..self.crop_bot:full_data_str(pos_child, data_child))
   if pos_str_lowest_parent == nil then
     self.crop_bot:pluck_child(pos_child, data_child, fail_reason)
   else
