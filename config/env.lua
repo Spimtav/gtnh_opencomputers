@@ -8,7 +8,7 @@ Notes:
 local env = {}
 
 
-env.log_level = const.log_levels.DEBUG
+env.log_level = const.log_levels.INFO
 
 
 return env
