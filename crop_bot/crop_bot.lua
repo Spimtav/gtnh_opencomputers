@@ -239,7 +239,7 @@ function Crop_Bot:bind_plant()
   self:equip(const.crop_bot.ITEM_BINDER)
 
   -- Sneaking needed bc harvesting takes normal right-click priority over binding
-  bot.use(const.FACINGS[const.D], true)
+  bot.useDown(const.FACINGS[const.U], true)
 
   logging.print("Bound plant at: "..self:pos_str(), const.log_levels.DEBUG)
 end
@@ -249,13 +249,13 @@ function Crop_Bot:clean_bind_dislocator()
   move.face_dir(const.crop_bot.LOC_CROPS.DIR)
 
   self:equip(const.crop_bot.ITEM_BINDER)
-  bot.use(sides.front, true)
-  bot.use(sides.front, true)
+  bot.use(nil, true)
+  bot.use(nil, true)
   logging.print("Unbound the dislocator", const.log_levels.DEBUG)
 
   self.patrol:travel_pos(const.crop_bot.LOC_DISLOCATOR.POS, true)
   move.face_dir(const.crop_bot.LOC_DISLOCATOR.DIR)
-  bot.use(sides.front)
+  bot.use()
   logging.print("Bound dislocator", const.log_levels.DEBUG)
 
   self.patrol:travel_prev()
@@ -273,7 +273,7 @@ function Crop_Bot:swap_plant(binding_needed)
   redstone.setOutput(sides.front, 0)
 
   self:equip(const.crop_bot.ITEM_BINDER)
-  bot.use(sides.front)
+  bot.use()
 
   logging.print("Swapped plant at: "..self:pos_str(), const.log_levels.DEBUG)
 end
