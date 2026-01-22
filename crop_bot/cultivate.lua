@@ -217,7 +217,7 @@ function Cultivate:handle_replacement(pos_child, data_child)
     self.crop_bot:pluck_child(pos_child, data_child, fail_reason)
   else
     local pos_lowest_parent = coord:new_from_str(pos_str_lowest_parent)
-    self.crop_bot:replace_plants(pos_child, pos_lowest_parent, data_child, data_lowest_parent)
+    self.crop_bot:replace_plants(pos_child, pos_lowest_parent, data_child, self.data_parents[pos_str_lowest_parent])
     self.data_parents[pos_str_lowest_parent] = data_child
   end
 end
