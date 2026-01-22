@@ -94,6 +94,28 @@ function Crop_Bot:eject_all_misc()
   logging.print("Ejected inventory", const.log_levels.DEBUG)
 end
 
+function Crop_Bot:crop_count()
+  self:equip(const.crop_bot.ITEM_SPADE)
+  local crops = inv.getStackInInternalSlot(self.items[const.crop_bot.ITEM_CROP])
+
+  return crops.size
+end
+
+function Crop_Bot:replenish_crops()
+  local crop_size = self:crop_count()
+
+  self.patrol:travel_pos(const.crop_bot.LOC_CROPS.POS, true)
+  move.face_dir(const.crop_bot.LOC_CROPS.DIR)
+
+  self:equip(const.crop_bot.ITEM_SPADE)
+  bot.select(self.items[const.crop_bot.ITEM_CROP])
+  inv.suckFromSlot(sides.front, const.crop_bot.CROP_CHEST_SLOT, const.STACK_MAX - crop_size)
+  logging.print("Replenished crops", const.log_levels.DEBUG)
+
+  self.patrol:travel_prev()
+end
+
+
 ---------------------------- Planting Checks -----------------------------------
 
 function Crop_Bot:is_weed(scan_data)
@@ -187,27 +209,10 @@ end
 
 ---------------------------- Planting Actions ----------------------------------
 
-function Crop_Bot:replenish_crops()
-  self:equip(const.crop_bot.ITEM_SPADE)
-
-  local crops = inv.getStackInInternalSlot(self.items[const.crop_bot.ITEM_CROP])
-  local crop_size = crops.size
-  if crops.size > const.crop_bot.MIN_CROPS then
-    return
-  end
-
-  self.patrol:travel_pos(const.crop_bot.LOC_CROPS.POS, true)
-  move.face_dir(const.crop_bot.LOC_CROPS.DIR)
-
-  local crop_slot = self.items[const.crop_bot.ITEM_CROP]
-  inv.suckFromSlot(sides.front, crop_slot, const.STACK_MAX - crop_size)
-  logging.print("Replenished crops", const.log_levels.DEBUG)
-
-  self.patrol:travel_prev()
-end
-
 function Crop_Bot:add_crop()
-  self:replenish_crops()
+  if self:crop_count() <= const.crop_bot.MIN_CROPS then
+    self:replenish_crops()
+  end
 
   self:equip(const.crop_bot.ITEM_CROP)
   bot.useDown()

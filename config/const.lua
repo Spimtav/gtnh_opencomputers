@@ -55,6 +55,8 @@ const.crop_bot = {
 
   INV_SIZE = 16,
   MIN_CROPS = 4,
+  CROP_CHEST_SLOT = 2,
+
   RECHARGE_TIMEOUT = 5,
 
   LOC_CROPS = {
