@@ -190,13 +190,15 @@ end
 
 function Cultivate:handle_parent_stats()
   local num_maxed = 0
-
+  local min_growth = 99
+  local min_gain = 99
+  local max_resist = -99
   for _, data_parent in pairs(self.data_parents) do
     local growth, gain, resist = self.crop_bot:plant_stats(data_parent)
 
-    self.min_growth = math.min(growth, self.min_growth)
-    self.min_gain = math.min(gain, self.min_gain)
-    self.max_resist = math.max(resist, self.max_resist)
+    min_growth = math.min(growth, min_growth)
+    min_gain = math.min(gain, min_gain)
+    max_resist = math.max(resist, max_resist)
 
     if self:plant_maxed(data_parent) then
       num_maxed = num_maxed + 1
@@ -204,6 +206,9 @@ function Cultivate:handle_parent_stats()
   end
 
   self.num_maxed_parents = num_maxed
+  self.min_growth = min_growth
+  self.min_gain = min_gain
+  self.max_resist = max_resist
 
   local stat_str = tostring(self.min_growth)..","..tostring(self.min_gain)..","..tostring(self.max_resist)
   local maxed_str = tostring(self.num_maxed_parents).."/"..tostring(self.num_parents)
