@@ -50,11 +50,12 @@ const.MC_FACINGS = {
 }
 
 const.crop_bot = {
-  PLOT_LENGTH = 2,
-  PLOT_WIDTH = 2,
+  PLOT_LENGTH = 7,
+  PLOT_WIDTH = 7,
 
   INV_SIZE = 16,
-  MIN_CROPS = 1,
+  MIN_CROPS = 4,
+  RECHARGE_TIMEOUT = 5,
 
   LOC_CROPS = {
     POS = coord:new(0,0),

@@ -255,6 +255,8 @@ function Cultivate:cultivate()
       end
     end
 
+    self.crop_bot:eject_all_misc()
+
     logging.print("\n"..string.rep("_", 30), const.log_levels.INFO)
   end
 

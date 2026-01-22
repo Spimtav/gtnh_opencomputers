@@ -9,8 +9,10 @@ Notes:
 
 local Patrol = {}
 
+local os = require("os")
 local bot = require("robot")
 local move = require("move")
+
 local coord = require("coord")
 
 
@@ -101,6 +103,8 @@ function Patrol:patrol(bot_func, bot_obj, patrol_length, patrol_width)
   end
 
   self:travel_start()
+
+  os.sleep(const.crop_bot.RECHARGE_TIMEOUT)
 end
 
 
