@@ -122,6 +122,19 @@ function Crop_Bot:is_weed(scan_data)
   return scan_data[const.crop_bot.PLANT_NAME] == const.crop_bot.PLANT_NAME_WEED
 end
 
+function Crop_Bot:growth_is_weedy(scan_data)
+  local growth, _, _ = self:plant_stats(plant_data)
+
+  return (growth ~= nil) and (growth >= const.crop_bot.GROWTH_THRESH_WEED)
+end
+
+function Crop_Bot:is_weedy(scan_data)
+  local weed = self:is_weed(scan_data)
+  local weedy = self:growth_is_weedy(scan_data)
+
+  return weed or weedy
+end
+
 function Crop_Bot:is_air(scan_data)
   return scan_data[const.crop_bot.BLOCK_NAME] == const.crop_bot.BLOCK_NAME_AIR
 end
@@ -220,17 +233,6 @@ function Crop_Bot:add_crop()
   logging.print("Used crop stick at: "..self:pos_str(), const.log_levels.DEBUG)
 end
 
--- TODO: replace weedified parent plant
-function Crop_Bot:handle_weed()
-  self:equip(const.crop_bot.ITEM_SPADE)
-  bot.useDown()
-  logging.print("Removed weed at: "..self:pos_str(), const.log_levels.DEBUG)
-
-  if not self:odd_pos() then
-    self:add_crop()
-  end
-end
-
 function Crop_Bot:handle_air()
   self:add_crop()
 
@@ -291,7 +293,7 @@ function Crop_Bot:replace_plants(pos_child, pos_parent, data_child, data_parent)
 
   self.patrol:travel_pos(pos_parent, true)
   self:bind_plant()
-  self:pluck_plant(false)
+  self:pluck(false)
   self:swap_plant(false)
 
   local str_parent = self:full_data_str(pos_parent, data_parent)
@@ -299,15 +301,11 @@ function Crop_Bot:replace_plants(pos_child, pos_parent, data_child, data_parent)
   logging.print("Replaced parent ("..str_parent..") with child ("..str_child..")", const.log_levels.INFO)
 end
 
-function Crop_Bot:pluck_plant(replace_crops)
+-- TODO: replace weedified parent plant
+function Crop_Bot:pluck(replace_crops)
   self:equip(const.crop_bot.ITEM_SPADE)
 
-  local scan_data = self:analyze_crop()
-
-  if not self:is_mature(scan_data) then
-    bot.useDown()
-  end
-
+  bot.useDown()  -- in case it's a mature plant, for higher chance of seedbag
   bot.swingDown()
 
   if replace_crops then
@@ -318,14 +316,14 @@ end
 function Crop_Bot:pluck_child(pos_child, data_child, fail_reason)
   self.patrol:travel_pos(pos_child, true)
 
-  self:pluck_plant(true)
+  self:pluck(true)
 
   local str_child = self:full_data_str(pos_child, data_child)
   logging.print("Plucked child ("..str_child.."): "..fail_reason, const.log_levels.DEBUG)
 end
 
 function Crop_Bot:clear_plot()
-  self:pluck_plant(false)
+  self:pluck(false)
 
   logging.print("Cleared plot at: "..self:pos_str(), const.log_levels.DEBUG)
 end

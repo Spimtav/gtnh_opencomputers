@@ -171,8 +171,8 @@ function Cultivate:handle_patrol()
     updated_plot = true
   end
 
-  if self.crop_bot:is_weed(scan_data) then
-    self.crop_bot:handle_weed()
+  if self.crop_bot:is_weedy(scan_data) then
+    self.crop_bot:pluck(true)
     updated_plot = true
   end
 

@@ -90,7 +90,9 @@ const.crop_bot = {
   PLANT_NAME_WEED = "weed",
   PLANT_NAME_EMPTY = nil,
   BLOCK_NAME_CROP = "IC2:blockCrop",
-  BLOCK_NAME_AIR = "minecraft:air"
+  BLOCK_NAME_AIR = "minecraft:air",
+
+  GROWTH_THRESH_WEED = 24
 }
 
 const.crop_bot.cultivate = {
