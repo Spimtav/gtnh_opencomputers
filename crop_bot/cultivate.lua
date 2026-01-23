@@ -105,7 +105,11 @@ function Cultivate:valid_child(data_child)
 end
 
 function Cultivate:valid_parent(data_parent)
-  return self.crop_bot:is_plant(data_parent)
+  if not self.crop_bot:is_plant(data_parent) then
+    return false, "not a plant"
+  end
+
+  return true, nil
 end
 
 function Cultivate:total_stat_improvement(data_child, data_parent)
@@ -179,13 +183,15 @@ end
 function Cultivate:handle_patrol()
   local scan_data = self.crop_bot:analyze_crop()
 
-  local valid_func = self.valid_child
+  local valid, reason
   if self.crop_bot:odd_pos() then
-    valid_func = self.valid_parent
+    valid, reason = self:valid_parent(scan_data)
+  else
+    valid, reason = self:valid_child(scan_data)
   end
 
-  if not valid_func(self, scan_data) then
-    self.crop_bot:pluck(true)
+  if not valid then
+    self.crop_bot:pluck(true, reason)
   elseif self.crop_bot:is_air(scan_data) then
     self.crop_bot:handle_air()
   end
