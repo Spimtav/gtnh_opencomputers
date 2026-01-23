@@ -64,8 +64,20 @@ function Cultivate:invalid_reason_str(min_stat, invalid_stat, max_stat)
 end
 
 function Cultivate:valid_child(data_child)
+  if self.crop_bot:is_weed(data_child) then
+    return false, "weed"
+  end
+
   if not self.crop_bot:is_plant(data_child) then
     return false, "not a plant"
+  end
+
+  if not self.crop_bot:same_species(data_child, const.crop_bot.cultivate.SPECIES) then
+    return false, "wrong species"
+  end
+
+  if self.crop_bot:growth_is_weedy(data_child) then
+    return false, "weedy growth"
   end
 
   local growth, gain, resist = self.crop_bot:plant_stats(data_child)
@@ -90,6 +102,10 @@ function Cultivate:valid_child(data_child)
   end
 
   return true, nil
+end
+
+function Cultivate:valid_parent(data_parent)
+  return self.crop_bot:is_plant(data_parent)
 end
 
 function Cultivate:total_stat_improvement(data_child, data_parent)
@@ -162,27 +178,19 @@ end
 
 function Cultivate:handle_patrol()
   local scan_data = self.crop_bot:analyze_crop()
-  local updated_plot = false
 
-  local species = const.crop_bot.cultivate.SPECIES
-  local plant = self.crop_bot:is_plant(scan_data)
-  local wrong_species = not self.crop_bot:same_species(scan_data, species)
-  local weedy = self.crop_bot:is_weedy(scan_data)
+  local valid_func = self.valid_child
+  if self.crop_bot:odd_pos() then
+    valid_func = self.valid_parent
+  end
 
-  if (plant and wrong_species) or (weedy) then
+  if not valid_func(self, scan_data) then
     self.crop_bot:pluck(true)
-    updated_plot = true
-  end
-
-  if self.crop_bot:is_air(scan_data) then
+  elseif self.crop_bot:is_air(scan_data) then
     self.crop_bot:handle_air()
-    updated_plot = true
   end
 
-  if updated_plot then
-    scan_data = self.crop_bot:analyze_crop()
-  end
-
+  scan_data = self.crop_bot:analyze_crop()
   local crop_pos = self.crop_bot:pos_str()
   if self.crop_bot:odd_pos() then
     self.data_parents[crop_pos] = scan_data
@@ -222,7 +230,7 @@ function Cultivate:handle_replacement(pos_child, data_child)
   local pos_str_lowest_parent, fail_reason = self:lowest_parent(data_child)
 
   if pos_str_lowest_parent == nil then
-    self.crop_bot:pluck_child(pos_child, data_child, fail_reason)
+    self.crop_bot:pluck_at(pos_child, fail_reason)
   else
     local pos_lowest_parent = coord:new_from_str(pos_str_lowest_parent)
     self.crop_bot:replace_plants(pos_child, pos_lowest_parent, data_child, self.data_parents[pos_str_lowest_parent])
@@ -257,7 +265,7 @@ function Cultivate:cultivate()
       if not self.crop_bot:is_plant(data_child) then
         logging.print("Ignoring empty child at: "..pos_str_child, const.log_levels.DEBUG)
       elseif not valid then
-        self.crop_bot:pluck_child(pos_child, data_child, fail_reason)
+        self.crop_bot:pluck_at(pos_child, fail_reason)
       else
         self:handle_replacement(pos_child, data_child)
       end

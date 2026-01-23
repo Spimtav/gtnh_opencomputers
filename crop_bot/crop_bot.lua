@@ -304,7 +304,7 @@ function Crop_Bot:replace_plants(pos_child, pos_parent, data_child, data_parent)
 end
 
 -- TODO: replace weedified parent plant
-function Crop_Bot:pluck(replace_crops)
+function Crop_Bot:pluck(replace_crops, reason)
   self:equip(const.crop_bot.ITEM_SPADE)
 
   local scan_data = self:analyze_crop()
@@ -318,15 +318,19 @@ function Crop_Bot:pluck(replace_crops)
   if replace_crops then
     self:handle_air()
   end
+
+  local generation = "child"
+  if self:odd_pos() then
+    generation = "parent"
+  end
+  local scan_str = self:full_data_str(self.patrol.pos_curr, scan_data)
+  logging.print("Plucked "..generation.."("..scan_str.."):"..reason, const.log_levels.DEBUG)
 end
 
-function Crop_Bot:pluck_child(pos_child, data_child, fail_reason)
-  self.patrol:travel_pos(pos_child, true)
+function Crop_Bot:pluck_at(pos, reason)
+  self.patrol:travel_pos(pos, true)
 
-  self:pluck(true)
-
-  local str_child = self:full_data_str(pos_child, data_child)
-  logging.print("Plucked child ("..str_child.."): "..fail_reason, const.log_levels.DEBUG)
+  self:pluck(true, reason)
 end
 
 function Crop_Bot:clear_plot()
