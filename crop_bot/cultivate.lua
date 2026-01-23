@@ -165,7 +165,7 @@ function Cultivate:handle_patrol()
   local updated_plot = false
 
   local species = const.crop_bot.cultivate.SPECIES
-  local plant = self:crop_bot:is_plant(scan_data)
+  local plant = self.crop_bot:is_plant(scan_data)
   local wrong_species = not self.crop_bot:same_species(scan_data, species)
   local weedy = self.crop_bot:is_weedy(scan_data)
 
