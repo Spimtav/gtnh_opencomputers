@@ -174,7 +174,8 @@ function Cultivate:handle_patrol()
     updated_plot = true
   end
 
-  if not self.crop_bot:same_species(scan_data, const.crop_bot.cultivate.SPECIES) then
+  local species = const.crop_bot.cultivate.SPECIES
+  if (self:is_plant(scan_data)) and (not self.crop_bot:same_species(scan_data, species)) then
     self.crop_bot:pluck(true)
     updated_plot = true
   end
