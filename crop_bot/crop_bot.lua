@@ -295,7 +295,7 @@ function Crop_Bot:replace_plants(pos_child, pos_parent, data_child, data_parent)
 
   self.patrol:travel_pos(pos_parent, true)
   self:bind_plant()
-  self:pluck(false)
+  self:pluck(false, "outdated parent")
   self:swap_plant(false)
 
   local str_parent = self:full_data_str(pos_parent, data_parent)
@@ -334,7 +334,7 @@ function Crop_Bot:pluck_at(pos, reason)
 end
 
 function Crop_Bot:clear_plot()
-  self:pluck(false)
+  self:pluck(false, "clearing plot")
 
   logging.print("Cleared plot at: "..self:pos_str(), const.log_levels.DEBUG)
 end
