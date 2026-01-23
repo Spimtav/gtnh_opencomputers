@@ -101,7 +101,7 @@ function Crop_Bot:crop_count()
   return crops.size
 end
 
-function Crop_Bot:replenish_crops()
+function Crop_Bot:replenish_crops(should_return)
   local crop_size = self:crop_count()
 
   self.patrol:travel_pos(const.crop_bot.LOC_CROPS.POS, true)
@@ -112,7 +112,9 @@ function Crop_Bot:replenish_crops()
   inv.suckFromSlot(sides.front, const.crop_bot.CROP_CHEST_SLOT, const.STACK_MAX - crop_size)
   logging.print("Replenished crops", const.log_levels.DEBUG)
 
-  self.patrol:travel_prev()
+  if should_return then
+    self.patrol:travel_prev()
+  end
 end
 
 
@@ -224,7 +226,7 @@ end
 
 function Crop_Bot:add_crop()
   if self:crop_count() <= const.crop_bot.MIN_CROPS then
-    self:replenish_crops()
+    self:replenish_crops(true)
   end
 
   self:equip(const.crop_bot.ITEM_CROP)
