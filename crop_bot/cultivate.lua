@@ -66,8 +66,6 @@ end
 function Cultivate:valid_child(data_child)
   if not self.crop_bot:is_plant(data_child) then
     return false, "not a plant"
-  elseif not self.crop_bot:same_species(data_child, const.crop_bot.cultivate.SPECIES) then
-    return false, "wrong species"
   end
 
   local growth, gain, resist = self.crop_bot:plant_stats(data_child)
@@ -172,6 +170,11 @@ function Cultivate:handle_patrol()
   end
 
   if self.crop_bot:is_weedy(scan_data) then
+    self.crop_bot:pluck(true)
+    updated_plot = true
+  end
+
+  if not self.crop_bot:same_species(scan_data, const.crop_bot.cultivate.SPECIES) then
     self.crop_bot:pluck(true)
     updated_plot = true
   end
