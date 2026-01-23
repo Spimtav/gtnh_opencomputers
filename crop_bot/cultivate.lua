@@ -165,19 +165,17 @@ function Cultivate:handle_patrol()
   local updated_plot = false
 
   local species = const.crop_bot.cultivate.SPECIES
+  local plant = self:crop_bot:is_plant(scan_data)
   local wrong_species = not self.crop_bot:same_species(scan_data, species)
-  if self.crop_bot:is_plant(scan_data) and wrong_species then
+  local weedy = self.crop_bot:is_weedy(scan_data)
+
+  if (plant and wrong_species) or (weedy) then
     self.crop_bot:pluck(true)
     updated_plot = true
   end
 
   if self.crop_bot:is_air(scan_data) then
     self.crop_bot:handle_air()
-    updated_plot = true
-  end
-
-  if self.crop_bot:is_weedy(scan_data) then
-    self.crop_bot:pluck(true)
     updated_plot = true
   end
 
