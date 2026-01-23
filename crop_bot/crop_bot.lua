@@ -305,7 +305,12 @@ end
 function Crop_Bot:pluck(replace_crops)
   self:equip(const.crop_bot.ITEM_SPADE)
 
-  bot.useDown()  -- in case it's a mature plant, for higher chance of seedbag
+  local scan_data = self:analyze_crop()
+
+  if not self:is_mature(scan_data) then
+    bot.useDown()
+  end
+
   bot.swingDown()
 
   if replace_crops then
