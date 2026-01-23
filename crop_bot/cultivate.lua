@@ -190,7 +190,7 @@ function Cultivate:handle_patrol()
     valid, reason = self:valid_child(scan_data)
   end
 
-  if not valid then
+  if (not self.crop_bot:is_empty_crop(scan_data)) and (not valid) then
     self.crop_bot:pluck(true, reason)
   elseif self.crop_bot:is_air(scan_data) then
     self.crop_bot:handle_air()
