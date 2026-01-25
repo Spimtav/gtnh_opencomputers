@@ -71,7 +71,7 @@ function Cultivate:sorted_keys(t)
     table.insert(new_t, k)
   end
 
-  new_t.sort()
+  table.sort(new_t)
   return new_t
 end
 
@@ -166,15 +166,18 @@ function Cultivate:decrement_stat_table(stat_table, stat)
 end
 
 function Cultivate:min_growth()
-  return math.min(table.unpack(self.growth))
+  local growths_asc = self:sorted_keys(self.growth)
+  return growths_asc[1]
 end
 
 function Cultivate:min_gain()
-  return math.min(table.unpack(self.gain))
+  local gains_asc = self:sorted_keys(self.gain)
+  return gains_asc[1]
 end
 
 function Cultivate:max_resist()
-  return math.max(table.unpack(self.resist))
+  local resists_asc = self:sorted_keys(self.resist)
+  return resists_asc[#resists_asc]
 end
 
 function Cultivate:total_stat_improvement(data_child, data_parent)
@@ -338,7 +341,10 @@ function Cultivate:handle_validity()
     self.crop_bot:pluck(true, reason)
   elseif self.crop_bot:is_air(scan_data) then
     self.crop_bot:handle_air()
+    valid = false
   end
+
+  return valid
 end
 
 function Cultivate:handle_pos_data()
@@ -356,6 +362,11 @@ function Cultivate:handle_pos_data()
 end
 
 function Cultivate:handle_initial_stats()
+  if not self.crop_bot:odd_pos() then
+    return
+  end
+
+  local scan_data = self.crop_bot:analyze_crop()
   local growth, gain, resist = self.crop_bot:plant_stats(scan_data)
 
   self:increment_stat_table(self.growth, growth)
@@ -392,12 +403,14 @@ function Cultivate:handle_replacement()
 end
 
 function Cultivate:handle_patrol()
-  self:handle_validity()
+  local valid = self:handle_validity()
   self:handle_pos_data()
+
+  local should_replace = valid and not self.crop_bot:odd_pos()
 
   if self.num_loops == 1 then
     self:handle_initial_stats()
-  elseif self.num_loops > 1 then
+  elseif self.num_loops > 1 and should_replace then
     self:handle_replacement()
   end
 end
