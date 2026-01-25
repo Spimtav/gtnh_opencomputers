@@ -52,13 +52,7 @@ function Cultivate:new()
   return new_cul
 end
 
---------------------------------- Prints ---------------------------------------
-
-function Cultivate:print_data_table(data_table)
-  for pos_str, scan_data in pairs(data_table) do
-    logging.print(self.crop_bot:full_data_str(pos_str, scan_data), const.log_levels.DEBUG)
-  end
-end
+------------------------------- Accumulated Data -------------------------------
 
 function Cultivate:data_str(s)
   local data = self.data[s]
@@ -74,7 +68,7 @@ function Cultivate:data_str(s)
 end
 
 function Cultivate:maxed_parents_str()
-  local data_str = "Maxed Parents: "..tostring(self.num_maxed_parents).."/"..tostring(self.num_parents))
+  local data_str = "Maxed Parents: "..tostring(self.num_maxed_parents).."/"..tostring(self.num_parents)
   local delta = self.num_maxed_parents - self.num_prev_maxed_parents
 
   local sign = ""
@@ -85,6 +79,29 @@ function Cultivate:maxed_parents_str()
   end
 
   return data_str.." ("..sign..tostring(delta)..")"
+end
+
+function Cultivate:increment_data(data_str)
+  self.data[data_str] = self.data[data_str] + 1
+  self.loop_deltas[data_str] = self.loop_deltas[data_str] + 1
+end
+
+function Cultivate:new_data_table()
+  local data_table = {}
+
+  for k,_ in pairs(const.crop_bot.cultivate.DATA) do
+    data_table[k] = 0
+  end
+
+  return data_table
+end
+
+--------------------------------- Prints ---------------------------------------
+
+function Cultivate:print_data_table(data_table)
+  for pos_str, scan_data in pairs(data_table) do
+    logging.print(self.crop_bot:full_data_str(pos_str, scan_data), const.log_levels.DEBUG)
+  end
 end
 
 function Cultivate:sorted_keys(t)
@@ -120,10 +137,10 @@ function Cultivate:print_data_screen()
   local maxed_parents_str = self:maxed_parents_str()
 
   local pluck_table = {
-    self:data_str(const.crop_bot.cultivate.DATA.INVALIDS)
-    self:data_str(const.crop_bot.cultivate.DATA.INVALID_STATS)
-    self:data_str(const.crop_bot.cultivate.DATA.NO_PROGRESSES)
-    self:data_str(const.crop_bot.cultivate.DATA.WEEDS)
+    self:data_str(const.crop_bot.cultivate.DATA.INVALIDS),
+    self:data_str(const.crop_bot.cultivate.DATA.INVALID_STATS),
+    self:data_str(const.crop_bot.cultivate.DATA.NO_PROGRESSES),
+    self:data_str(const.crop_bot.cultivate.DATA.WEEDS),
     self:data_str(const.crop_bot.cultivate.DATA.WEEDY_GROWTHS)
   }
   local pluck_stats = "("..table.concat(pluck_table, "|")..")"
@@ -184,11 +201,6 @@ function Cultivate:increment_stat_table(stat_table, stat)
   end
 
   stat_table[stat] = stat_table[stat] + 1
-end
-
-function Cultivate:increment_data(data_str)
-  self.data[data_str] = self.data[data_str] + 1
-  self.loop_deltas[data_str] = self.loop_deltas[data_str] + 1
 end
 
 function Cultivate:decrement_stat_table(stat_table, stat)
@@ -465,6 +477,9 @@ function Cultivate:cultivate()
   local length = const.crop_bot.PLOT_LENGTH
   local width = const.crop_bot.PLOT_WIDTH
 
+  self.data = self:new_data_table()
+  self.loop_deltas = self:new_data_table()
+
   self.crop_bot:clean_bind_dislocator()
 
   while not self:parents_maxed() do
@@ -485,7 +500,7 @@ function Cultivate:cultivate()
     self.crop_bot:eject_all_misc()
     self.crop_bot:replenish_crops(false)
 
-    self.loop_deltas = {}
+    self.loop_deltas = self:new_data_table()
 
     logging.print("\n"..string.rep("_", 30), const.log_levels.INFO)
   end
