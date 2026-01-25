@@ -304,6 +304,9 @@ function Crop_Bot:replace_plants(pos_child, pos_parent, data_child, data_parent)
 
   local str_parent = self:full_data_str(pos_parent, data_parent)
   local str_child = self:full_data_str(pos_child, data_child)
+
+  self.patrol:travel_pos(pos_child, true)
+
   logging.print("Replaced parent ("..str_parent..") with child ("..str_child..")", const.log_levels.INFO)
 end
 
