@@ -71,7 +71,7 @@ function Cultivate:sorted_keys(t)
     table.insert(new_t, k)
   end
 
-  new_t.sort
+  new_t.sort()
   return new_t
 end
 
@@ -97,20 +97,20 @@ function Cultivate:print_data_screen()
   -- screen updates
   term.clear()
 
-  print "Loop: "..tostring(self.num_loops)
-  print string.rep("=", 30)
-  print "Maxed Parents: "..tostring(self.num_maxed_parents).."/"..tostring(self.num_parents)
-  print "Swaps: "..tostring(self.num_replaced_parents)
-  print "Crosses: "..tostring(self.num_crosses)
-  print "\n"
-  print "Plucks: "..tostring(self.num_plucks)
-  print "  Invalid: "..tostring(self.num_invalids)
-  print "  Species: "..tostring(self.num_wrong_species)
-  print "  Weed: "..tostring(self.num_weeds)
-  print "  Weedy Growth: "..tostring(self.num_weedy_growths)
+  print("Loop: "..tostring(self.num_loops))
+  print(string.rep("=", 30))
+  print("Maxed Parents: "..tostring(self.num_maxed_parents).."/"..tostring(self.num_parents))
+  print("Swaps: "..tostring(self.num_replaced_parents))
+  print("Crosses: "..tostring(self.num_crosses))
+  print("\n")
+  print("Plucks: "..tostring(self.num_plucks))
+  print("  Invalid: "..tostring(self.num_invalids))
+  print("  Species: "..tostring(self.num_wrong_species))
+  print("  Weed: "..tostring(self.num_weeds))
+  print("  Weedy Growth: "..tostring(self.num_weedy_growths))
 
-  print stat_header
-  print string.rep("_", 30)
+  print(stat_header)
+  print(string.rep("_", 30))
   for i=1,max_rows do
     local str_growth, str_gain, str_resist = "", "", ""
 
@@ -135,7 +135,7 @@ function Cultivate:print_data_screen()
     row = row..string.rep(" ", offset_gain - string.len(row))..str_gain
     row = row..string.rep(" ", offset_resist - string.len(row))..str_resist
 
-    print row
+    print(row)
   end
 end
 
