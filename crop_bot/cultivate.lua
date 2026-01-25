@@ -386,18 +386,18 @@ function Cultivate:handle_replacement()
 
   local pos_parent = coord:new_from_str(pos_str_lowest_parent)
   local data_parent = self.data_parents[pos_str_lowest_parent]
-  self.crop_bot:replace_plants(pos_child, pos_lowest_parent, data_child, data_parent)
+  self.crop_bot:replace_plants(pos_child, pos_parent, data_child, data_parent)
 
   local c_growth, c_gain, c_resist = self.crop_bot:plant_stats(data_child)
   local p_growth, p_gain, p_resist = self.crop_bot:plant_stats(data_parent)
 
-  self:increment_stat_table(self.c_growth, growth)
-  self:increment_stat_table(self.c_gain, gain)
-  self:increment_stat_table(self.c_resist, resist)
+  self:increment_stat_table(self.growth, c_growth)
+  self:increment_stat_table(self.gain, c_gain)
+  self:increment_stat_table(self.resist, c_resist)
 
-  self:decrement_stat_table(self.p_growth, growth)
-  self:decrement_stat_table(self.p_gain, gain)
-  self:decrement_stat_table(self.p_resist, resist)
+  self:decrement_stat_table(self.growth, p_growth)
+  self:decrement_stat_table(self.gain, p_gain)
+  self:decrement_stat_table(self.resist, p_resist)
 
   self.data_parents[pos_str_lowest_parent] = data_child
 end
