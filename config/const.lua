@@ -99,7 +99,20 @@ const.crop_bot.cultivate = {
   MAX_GROWTH = 21,
   MAX_GAIN = 31,
   MAX_RESIST = 0,
-  SPECIES = "stickreed"
+  SPECIES = "stickreed",
+
+  DATA = {
+    MAXED_PARENTS = "num_maxed_parents",
+    SWAPS = "num_swaps",
+    CROSSES = "num_crosses",
+
+    PLUCKS = "Pl",
+    INVALIDS = "In",
+    INVALID_STATS = "InS",
+    NO_PROGRESSES = "NoP",
+    WEEDS = "We",
+    WEEDY_GROWTHS = "WeG"
+  }
 }
 
 

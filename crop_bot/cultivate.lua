@@ -41,15 +41,10 @@ function Cultivate:new()
     num_loops = 0,
     num_parents = 0,
     num_maxed_parents = 0,
+    num_prev_maxed_parents = 0,
 
-    num_swaps = 0,
-    num_crosses = 0,
-
-    num_plucks = 0,
-    num_invalids = 0,
-    num_wrong_species = 0,
-    num_weeds = 0,
-    num_weedy_growths = 0
+    data = {},
+    loop_deltas = {}
   }
   new_cul["num_parents"] = new_cul["crop_bot"]:num_odds()
   setmetatable(new_cul, self)
@@ -63,6 +58,33 @@ function Cultivate:print_data_table(data_table)
   for pos_str, scan_data in pairs(data_table) do
     logging.print(self.crop_bot:full_data_str(pos_str, scan_data), const.log_levels.DEBUG)
   end
+end
+
+function Cultivate:data_str(s)
+  local data = self.data[s]
+  local delta = self.loop_deltas[s]
+
+  local data_str = tostring(data)..s
+
+  if delta == 0 then
+    return data_str
+  end
+
+  return data_str.."(+"..tostring(delta)..")"
+end
+
+function Cultivate:maxed_parents_str()
+  local data_str = "Maxed Parents: "..tostring(self.num_maxed_parents).."/"..tostring(self.num_parents))
+  local delta = self.num_maxed_parents - self.num_prev_maxed_parents
+
+  local sign = ""
+  if delta == 0 then
+    return data_str
+  elseif delta > 0 then
+    sign = "+"
+  end
+
+  return data_str.." ("..sign..tostring(delta)..")"
 end
 
 function Cultivate:sorted_keys(t)
@@ -95,23 +117,26 @@ function Cultivate:print_data_screen()
   local num_rows = math.max(table.unpack({#sorted_growth, #sorted_gain, #sorted_resist}))
 
   -- other data init
+  local maxed_parents_str = self:maxed_parents_str()
+
   local pluck_table = {
-    "Inv: "..tostring(self.num_invalids),
-    "Spec: "..tostring(self.num_wrong_species),
-    "Weed: "..tostring(self.num_weeds),
-    "WeGr: "..tostring(self.num_weedy_growths)
+    self:data_str(const.crop_bot.cultivate.DATA.INVALIDS)
+    self:data_str(const.crop_bot.cultivate.DATA.INVALID_STATS)
+    self:data_str(const.crop_bot.cultivate.DATA.NO_PROGRESSES)
+    self:data_str(const.crop_bot.cultivate.DATA.WEEDS)
+    self:data_str(const.crop_bot.cultivate.DATA.WEEDY_GROWTHS)
   }
-  local pluck_stats = "("..table.concat(pluck_table, " | ")..")"
+  local pluck_stats = "("..table.concat(pluck_table, "|")..")"
 
   -- screen updates
   term.clear()
 
   print("Loop: "..tostring(self.num_loops))
   print(string.rep("=", 30))
-  print("Maxed Parents: "..tostring(self.num_maxed_parents).."/"..tostring(self.num_parents))
-  print("Swaps: "..tostring(self.num_swaps))
-  print("Crosses: "..tostring(self.num_crosses))
-  print("Plucks: "..tostring(self.num_plucks).." "..pluck_stats)
+  print(maxed_parents_str)
+  print("Swaps: "..self:data_str(const.crop_bot.cultivate.DATA.SWAPS))
+  print("Crosses: "..self:data_str(const.crop_bot.cultivate.DATA.CROSSES))
+  print("Plucks: "..self:data_str(const.crop_bot.cultivate.DATA.PLUCKS))
 
   print(stat_header)
   print(string.rep("_", 40))
@@ -159,6 +184,11 @@ function Cultivate:increment_stat_table(stat_table, stat)
   end
 
   stat_table[stat] = stat_table[stat] + 1
+end
+
+function Cultivate:increment_data(data_str)
+  self.data[data_str] = self.data[data_str] + 1
+  self.loop_deltas[data_str] = self.loop_deltas[data_str] + 1
 end
 
 function Cultivate:decrement_stat_table(stat_table, stat)
@@ -259,6 +289,7 @@ end
 
 function Cultivate:valid_child(data_child)
   if self.crop_bot:is_weed(data_child) then
+    self:increment_data(const.crop_bot.cultivate.WEEDS)
     return false, "weed"
   end
 
@@ -267,10 +298,12 @@ function Cultivate:valid_child(data_child)
   end
 
   if not self.crop_bot:same_species(data_child, const.crop_bot.cultivate.SPECIES) then
+    self:increment_data(const.crop_bot.cultivate.CROSSES)
     return false, "wrong species"
   end
 
-  if self.crop_bot:growth_is_weedy(data_child) then
+  if self.crop_bot:is_weedy_growth(data_child) then
+    self:increment_data(const.crop_bot.cultivate.WEEDY_GROWTHS)
     return false, "weedy growth"
   end
 
@@ -285,6 +318,7 @@ function Cultivate:valid_child(data_child)
   local valid_resist, reason_resist = self:valid_resist(resist)
 
   if (not valid_growth) or (not valid_gain) or (not valid_resist) then
+    self:increment_data(const.crop_bot.cultivate.INVALID_STATS)
     return false, table.concat({reason_growth, reason_gain, reason_resist}, " | ")
   end
 
@@ -303,15 +337,10 @@ end
 function Cultivate:lowest_parent(data_child)
   local lowest_parent_key = nil
   local highest_progress = 0
-  local num_regressions = 0
 
   for pos_str_parent, data_parent in pairs(self.data_parents) do
     local regressed = self:child_regression(data_child, data_parent)
     local progress = self:total_stat_improvement(data_child, data_parent)
-
-    if regressed then
-      num_regressions = num_regressions + 1
-    end
 
     if (not regressed) and (progress > highest_progress) then
       lowest_parent_key = pos_str_parent
@@ -322,8 +351,10 @@ function Cultivate:lowest_parent(data_child)
   local fail_reason = nil
   if num_regressions == self.num_parents then
     fail_reason = "regression"
+    self:increment_data(const.crop_bot.cultivate.NO_PROGRESSES)
   elseif lowest_parent_key == nil then
     fail_reason = "no improvement"
+    self:increment_data(const.crop_bot.cultivate.NO_PROGRESSES)
   end
 
   return lowest_parent_key, fail_reason
@@ -343,6 +374,8 @@ function Cultivate:handle_validity()
 
   if (not self.crop_bot:is_empty_crop(scan_data)) and (not valid) then
     self.crop_bot:pluck(true, reason)
+    self:increment_data(const.crop_bot.cultivate.PLUCKS)
+    self:increment_data(const.crop_bot.cultivate.INVALIDS)
   elseif self.crop_bot:is_air(scan_data) then
     self.crop_bot:handle_air()
     valid = false
@@ -392,6 +425,7 @@ function Cultivate:handle_replacement()
   local data_parent = self.data_parents[pos_str_lowest_parent]
 
   self.crop_bot:replace_plants(pos_child, pos_parent, data_child, data_parent)
+  self:increment_data(const.crop_bot.cultivate.SWAPS)
 
   local c_growth, c_gain, c_resist = self.crop_bot:plant_stats(data_child)
   local p_growth, p_gain, p_resist = self.crop_bot:plant_stats(data_parent)
@@ -435,6 +469,7 @@ function Cultivate:cultivate()
 
   while not self:parents_maxed() do
     self.num_loops = self.num_loops + 1
+    self.num_prev_maxed_parents = self.num_maxed_parents
     self.num_maxed_parents = 0
 
     -- No way to tail logs on OpenComputers, so this is a low-tech way to
@@ -449,6 +484,8 @@ function Cultivate:cultivate()
 
     self.crop_bot:eject_all_misc()
     self.crop_bot:replenish_crops(false)
+
+    self.loop_deltas = {}
 
     logging.print("\n"..string.rep("_", 30), const.log_levels.INFO)
   end

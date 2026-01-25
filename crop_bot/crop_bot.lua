@@ -128,7 +128,7 @@ function Crop_Bot:is_weed(scan_data)
   return scan_data[const.crop_bot.PLANT_NAME] == const.crop_bot.PLANT_NAME_WEED
 end
 
-function Crop_Bot:growth_is_weedy(scan_data)
+function Crop_Bot:is_weedy_growth(scan_data)
   local growth, _, _ = self:plant_stats(scan_data)
 
   return (growth ~= nil) and (growth >= const.crop_bot.GROWTH_THRESH_WEED)
@@ -136,7 +136,7 @@ end
 
 function Crop_Bot:is_weedy(scan_data)
   local weed = self:is_weed(scan_data)
-  local weedy = self:growth_is_weedy(scan_data)
+  local weedy = self:is_weedy_growth(scan_data)
 
   return weed or weedy
 end
