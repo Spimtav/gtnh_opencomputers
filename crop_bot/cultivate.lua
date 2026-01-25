@@ -81,9 +81,7 @@ function Cultivate:maxed_parents_str()
   return data_str.." ("..sign..tostring(delta)..")"
 end
 
-function Cultivate:increment_data(data_key)
-  local data_str = const.crop_bot.cultivate.DATA[data_key]
-
+function Cultivate:increment_data(data_str)
   self.data[data_str] = self.data[data_str] + 1
   self.loop_deltas[data_str] = self.loop_deltas[data_str] + 1
 end
@@ -136,8 +134,6 @@ function Cultivate:print_data_screen()
   local num_rows = math.max(table.unpack({#sorted_growth, #sorted_gain, #sorted_resist}))
 
   -- other data init
-  local maxed_parents_str = self:maxed_parents_str()
-
   local pluck_table = {
     self:data_str(const.crop_bot.cultivate.DATA.INVALIDS),
     self:data_str(const.crop_bot.cultivate.DATA.INVALID_STATS),
@@ -152,10 +148,10 @@ function Cultivate:print_data_screen()
 
   print("Loop: "..tostring(self.num_loops))
   print(string.rep("=", 30))
-  print(maxed_parents_str)
+  print(self:maxed_parent_str())
   print("Swaps: "..self:data_str(const.crop_bot.cultivate.DATA.SWAPS))
   print("Crosses: "..self:data_str(const.crop_bot.cultivate.DATA.CROSSES))
-  print("Plucks: "..self:data_str(const.crop_bot.cultivate.DATA.PLUCKS))
+  print("Plucks: "..self:data_str(const.crop_bot.cultivate.DATA.PLUCKS).." "..pluck_stats)
 
   print(stat_header)
   print(string.rep("_", 40))
@@ -386,13 +382,13 @@ function Cultivate:handle_validity()
     valid, reason = self:valid_child(scan_data)
   end
 
-  if (not self.crop_bot:is_empty_crop(scan_data)) and (not valid) then
+  if self.crop_bot:is_air(scan_data) then
+    self.crop_bot:handle_air()
+    valid = false
+  elseif (not self.crop_bot:is_empty_crop(scan_data)) and (not valid) then
     self.crop_bot:pluck(true, reason)
     self:increment_data(const.crop_bot.cultivate.DATA.PLUCKS)
     self:increment_data(const.crop_bot.cultivate.DATA.INVALIDS)
-  elseif self.crop_bot:is_air(scan_data) then
-    self.crop_bot:handle_air()
-    valid = false
   end
 
   return valid
