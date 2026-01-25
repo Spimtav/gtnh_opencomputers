@@ -437,6 +437,12 @@ function Cultivate:cultivate()
     self.num_loops = self.num_loops + 1
     self.num_maxed_parents = 0
 
+    -- No way to tail logs on OpenComputers, so this is a low-tech way to
+    --   handle swapping between debugging strings and normal data prints
+    if env.log_level >= const.log_levels.WARNING then
+      self:print_data_screen()
+    end
+
     logging.print("Loop "..tostring(self.num_loops), const.log_levels.INFO)
 
     self.crop_bot.patrol:patrol(self.handle_patrol, self, length, width)
