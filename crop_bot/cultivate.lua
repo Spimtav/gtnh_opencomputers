@@ -301,7 +301,7 @@ end
 
 function Cultivate:valid_child(data_child)
   if self.crop_bot:is_weed(data_child) then
-    self:increment_data(const.crop_bot.cultivate.WEEDS)
+    self:increment_data(const.crop_bot.cultivate.DATA.WEEDS)
     return false, "weed"
   end
 
@@ -310,12 +310,12 @@ function Cultivate:valid_child(data_child)
   end
 
   if not self.crop_bot:same_species(data_child, const.crop_bot.cultivate.SPECIES) then
-    self:increment_data(const.crop_bot.cultivate.CROSSES)
+    self:increment_data(const.crop_bot.cultivate.DATA.CROSSES)
     return false, "wrong species"
   end
 
   if self.crop_bot:is_weedy_growth(data_child) then
-    self:increment_data(const.crop_bot.cultivate.WEEDY_GROWTHS)
+    self:increment_data(const.crop_bot.cultivate.DATA.WEEDY_GROWTHS)
     return false, "weedy growth"
   end
 
@@ -330,7 +330,7 @@ function Cultivate:valid_child(data_child)
   local valid_resist, reason_resist = self:valid_resist(resist)
 
   if (not valid_growth) or (not valid_gain) or (not valid_resist) then
-    self:increment_data(const.crop_bot.cultivate.INVALID_STATS)
+    self:increment_data(const.crop_bot.cultivate.DATA.INVALID_STATS)
     return false, table.concat({reason_growth, reason_gain, reason_resist}, " | ")
   end
 
@@ -363,10 +363,10 @@ function Cultivate:lowest_parent(data_child)
   local fail_reason = nil
   if num_regressions == self.num_parents then
     fail_reason = "regression"
-    self:increment_data(const.crop_bot.cultivate.NO_PROGRESSES)
+    self:increment_data(const.crop_bot.cultivate.DATA.NO_PROGRESSES)
   elseif lowest_parent_key == nil then
     fail_reason = "no improvement"
-    self:increment_data(const.crop_bot.cultivate.NO_PROGRESSES)
+    self:increment_data(const.crop_bot.cultivate.DATA.NO_PROGRESSES)
   end
 
   return lowest_parent_key, fail_reason
@@ -386,8 +386,8 @@ function Cultivate:handle_validity()
 
   if (not self.crop_bot:is_empty_crop(scan_data)) and (not valid) then
     self.crop_bot:pluck(true, reason)
-    self:increment_data(const.crop_bot.cultivate.PLUCKS)
-    self:increment_data(const.crop_bot.cultivate.INVALIDS)
+    self:increment_data(const.crop_bot.cultivate.DATA.PLUCKS)
+    self:increment_data(const.crop_bot.cultivate.DATA.INVALIDS)
   elseif self.crop_bot:is_air(scan_data) then
     self.crop_bot:handle_air()
     valid = false
@@ -437,7 +437,7 @@ function Cultivate:handle_replacement()
   local data_parent = self.data_parents[pos_str_lowest_parent]
 
   self.crop_bot:replace_plants(pos_child, pos_parent, data_child, data_parent)
-  self:increment_data(const.crop_bot.cultivate.SWAPS)
+  self:increment_data(const.crop_bot.cultivate.DATA.SWAPS)
 
   local c_growth, c_gain, c_resist = self.crop_bot:plant_stats(data_child)
   local p_growth, p_gain, p_resist = self.crop_bot:plant_stats(data_parent)

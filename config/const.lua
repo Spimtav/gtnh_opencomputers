@@ -102,9 +102,8 @@ const.crop_bot.cultivate = {
   SPECIES = "stickreed",
 
   DATA = {
-    MAXED_PARENTS = "num_maxed_parents",
-    SWAPS = "num_swaps",
-    CROSSES = "num_crosses",
+    SWAPS = "Sw",
+    CROSSES = "Cr",
 
     PLUCKS = "Pl",
     INVALIDS = "In",
