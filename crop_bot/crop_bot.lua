@@ -48,6 +48,10 @@ end
 
 -------------------------------- Position --------------------------------------
 
+function Crop_Bot:pos()
+  return self.patrol.pos_curr:clone()
+end
+
 function Crop_Bot:pos_str()
   return tostring(self.patrol.pos_curr)
 end

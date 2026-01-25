@@ -25,6 +25,10 @@ function Coord:new_from_str(s)
   return Coord:new(x, y)
 end
 
+function Coord:clone()
+  return Coord:new(self.x, self.y)
+end
+
 function Coord:set_to(coord)
   self.x = coord.x
   self.y = coord.y
