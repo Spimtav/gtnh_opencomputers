@@ -81,7 +81,9 @@ function Cultivate:maxed_parents_str()
   return data_str.." ("..sign..tostring(delta)..")"
 end
 
-function Cultivate:increment_data(data_str)
+function Cultivate:increment_data(data_key)
+  local data_str = const.crop_bot.cultivate.DATA[data_key]
+
   self.data[data_str] = self.data[data_str] + 1
   self.loop_deltas[data_str] = self.loop_deltas[data_str] + 1
 end
@@ -89,8 +91,8 @@ end
 function Cultivate:new_data_table()
   local data_table = {}
 
-  for k,_ in pairs(const.crop_bot.cultivate.DATA) do
-    data_table[k] = 0
+  for _,v in pairs(const.crop_bot.cultivate.DATA) do
+    data_table[v] = 0
   end
 
   return data_table
