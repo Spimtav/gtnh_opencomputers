@@ -148,7 +148,7 @@ function Cultivate:print_data_screen()
 
   print("Loop: "..tostring(self.num_loops))
   print(string.rep("=", 30))
-  print(self:maxed_parent_str())
+  print(self:maxed_parents_str())
   print("Swaps: "..self:data_str(const.crop_bot.cultivate.DATA.SWAPS))
   print("Crosses: "..self:data_str(const.crop_bot.cultivate.DATA.CROSSES))
   print("Plucks: "..self:data_str(const.crop_bot.cultivate.DATA.PLUCKS).." "..pluck_stats)
