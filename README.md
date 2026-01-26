@@ -26,5 +26,5 @@ OpenOS doesn't appear to use the `LUA_PATH` variable to prepopulate its search p
 
 ## Development
 Guidelines for updating this project:
-- add new files and folders to `project.lua`, or they won't get fetched by the fetcher script.
+- add new files and folders to `project.lua`, or they won't get fetched by the fetcher script or reloaded by the exec script.
 

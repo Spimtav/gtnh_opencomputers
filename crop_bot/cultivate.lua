@@ -1,22 +1,37 @@
 --[[
-Notes:
-- plot assumptions:
-  - plot is made up of soil that can accept IC2 crop sticks
-  - plot is one tile below the robot
-  - plot is small enough that robot won't run out of energy during operation
-- crop assumptions:
-  - initial crops to optimize are placed at odd coords
-  - all odd coords are pre-planted with identical crop-types to stat-up
-  - no pre-planted crops have any stat that's greater than the desired stats
-- robot assumptions:
-  - robot has an equipped Crops++ spade (which is unbreakable)
-  - robot has a Thaumic Tinkerer transvector binder in its inventory
-- block assumptions:
-  - charger is 1 block left of bottom left corner of plot
-  - IC2 crop stick storage container:
-    - 1 block down of bottom left corner of plot
-    - infinitely restocked with crop sticks via another system
-    - never depletes
+Breeding crops together until target stats achieved.
+
+Operation:
+- patrols the specified area
+- plucks: weeds, crossbreeds, children that don't progress stats, children
+          with weedy growths (Gr24+).
+- replaces air blocks with crops
+- Greedy progress heuristic
+  - during patrol, if bot finds a child with better stats than any parent,
+    it will find and replace worst parent right away (highest stat difference)
+- End state:
+  - odd coords are parents with specified target stats
+  - even coords are empty (to prevent weeds)
+
+Assumptions:
+- everything from base crop_bot class
+- Plants:
+  - no parent has any stat greater than the target stats.
+  - growth target is low enough (~20) that Gr24+ children do not appear.
+    - in testing, Gr21 parents produced small # of Gr24s, gumming up operation
+  - target resistance is 0
+  - cross-species parents allowed
+    - parents are all treated the same regardless of species
+    - allows faster cultivation by utilizing fast-breeding parent species
+
+Config:
+- set log level to >=WARN for cool stats screen
+  - i would have had this be default and logs written to log file, but
+    OpenComputers doesn't have a tail command or multiple terminal tabs
+    so having both at once is of limited use.
+
+Current Limitations:
+- replacement of weeded/empty parents isn't implemented yet.
 ]]
 
 term = require("term")

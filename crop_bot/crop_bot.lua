@@ -1,15 +1,29 @@
 --[[
-Notes:
-- Common methods and state for crop bot scripts.
-- Starting Inventory Assumptions:
+Common methods and state for crop bot scripts.
+
+Assumptions:
+- Starting Inventory (change slots in config):
   - Equipped: IC2 spade tool
   - Slot 1: Thaumic Tinkerer transvector binder
   - Slot 2: 64x IC2 crop sticks
-- Assumptions:
+- Utility Blocks:
+  - Transvector Dislocator pointed towards the swap plot
+  - charger in bottom-left corner of plot, is always on, and pointed at robot
+  - IC2 crop stick storage never empties
+- Storage:
+  - crop bot drops items it collects on the ground
+    - ie: seed bags, crop sticks, weeds, plant drops, ...
+  - you have an item management system already set up to either store or void
+    these items
+    - ie: advanced item collectors into an AE2 system or trash can
+- Plot:
+  - all plot tiles are a soil that can accept IC2 crop sticks
+  - soil is 2 tiles below the robot
+  - plot is small enough that robot won't run out of energy during operation
+- Plants:
   - parents are odd-summed coords, children are even
-  - the Transvector Dislocator is pointed towards the swap plot
-  - there are enough Advanced Item Collectors around the plot to automatically
-    suck up and deposit items into your AE2 system / other storage
+  - all parents are pre-planted before operation begins
+  - no pre-planted crops have any stat that's greater than the desired stats
 ]]
 
 
