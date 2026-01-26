@@ -480,8 +480,6 @@ function Cultivate:cultivate()
 
   while not self:parents_maxed() do
     self.num_loops = self.num_loops + 1
-    self.num_prev_maxed_parents = self.num_maxed_parents
-    self.num_maxed_parents = 0
 
     -- No way to tail logs on OpenComputers, so this is a low-tech way to
     --   handle swapping between debugging strings and normal data prints
@@ -490,6 +488,9 @@ function Cultivate:cultivate()
     end
 
     self.loop_deltas = self:new_data_table()
+    self.num_prev_maxed_parents = self.num_maxed_parents
+    self.num_maxed_parents = 0
+
 
     logging.print("Loop "..tostring(self.num_loops), const.log_levels.INFO)
 
