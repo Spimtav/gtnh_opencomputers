@@ -502,6 +502,7 @@ function Cultivate:cultivate()
     logging.print("\n"..string.rep("_", 30), const.log_levels.INFO)
   end
 
+  print("\nCleaning up child plots")
   self.crop_bot.patrol:patrol(self.handle_cleanup, self, length, width)
   self.crop_bot:eject_all_misc()
 end
@@ -512,7 +513,7 @@ function Cultivate.main()
 
   cul:cultivate()
 
-  logging.print("Finished cultivating", const.log_levels.DEBUG)
+  print("Finished cultivating")
 end
 
 
