@@ -106,7 +106,6 @@ const.crop_bot.cultivate = {
     CROSSES = "Cr",
 
     PLUCKS = "Pl",
-    INVALIDS = "In",
     INVALID_STATS = "InS",
     NO_PROGRESSES = "NoP",
     WEEDS = "We",

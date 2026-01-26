@@ -135,7 +135,6 @@ function Cultivate:print_data_screen()
 
   -- other data init
   local pluck_table = {
-    self:data_str(const.crop_bot.cultivate.DATA.INVALIDS),
     self:data_str(const.crop_bot.cultivate.DATA.INVALID_STATS),
     self:data_str(const.crop_bot.cultivate.DATA.NO_PROGRESSES),
     self:data_str(const.crop_bot.cultivate.DATA.WEEDS),
@@ -388,7 +387,6 @@ function Cultivate:handle_validity()
   elseif (not self.crop_bot:is_empty_crop(scan_data)) and (not valid) then
     self.crop_bot:pluck(true, reason)
     self:increment_data(const.crop_bot.cultivate.DATA.PLUCKS)
-    self:increment_data(const.crop_bot.cultivate.DATA.INVALIDS)
   end
 
   return valid
