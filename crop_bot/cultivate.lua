@@ -489,14 +489,14 @@ function Cultivate:cultivate()
       self:print_data_screen()
     end
 
+    self.loop_deltas = self:new_data_table()
+
     logging.print("Loop "..tostring(self.num_loops), const.log_levels.INFO)
 
     self.crop_bot.patrol:patrol(self.handle_patrol, self, length, width)
 
     self.crop_bot:eject_all_misc()
     self.crop_bot:replenish_crops(false)
-
-    self.loop_deltas = self:new_data_table()
 
     logging.print("\n"..string.rep("_", 30), const.log_levels.INFO)
   end
