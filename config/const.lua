@@ -113,6 +113,22 @@ const.crop_bot.cultivate = {
   }
 }
 
+const.crop_bot.propagate = {
+  MODE_SEEDS = "mode_seeds",
+  MODE_FIELD = "mode_field",
+
+  DATA = {
+    TARGETS = "Ta=",
+    BETTERS = "Ta+",
+
+    CROSSES = "Cr",
+    PLUCKS = "Pl",
+    INVALID_STATS = "InS",
+    WEEDS = "We",
+    WEEDY_GROWTHS = "WeG"
+  }
+}
+
 
 return const
 
