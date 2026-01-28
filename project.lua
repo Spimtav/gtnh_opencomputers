@@ -35,7 +35,8 @@ project.files = {
   "lib/robot/coord.lua",
   "crop_bot/README.md",
   "crop_bot/cultivate.lua",
-  "crop_bot/crop_bot.lua"
+  "crop_bot/crop_bot.lua",
+  "crop_bot/propagate.lua"
 }
 
 
