@@ -50,6 +50,8 @@ const.MC_FACINGS = {
 }
 
 const.crop_bot = {
+
+  GROWTH_THRESH_WEED = 24
   PLOT_LENGTH = 7,
   PLOT_WIDTH = 7,
 
@@ -87,12 +89,17 @@ const.crop_bot = {
   PLANT_SIZE_MAX = "crop:maxSize",
   BLOCK_NAME = "name",
 
-  PLANT_NAME_WEED = "weed",
-  PLANT_NAME_EMPTY = nil,
   BLOCK_NAME_CROP = "IC2:blockCrop",
   BLOCK_NAME_AIR = "minecraft:air",
 
-  GROWTH_THRESH_WEED = 24
+  PLANT_NAMES = {
+    EMPTY = nil,
+    WEED = "weed",
+
+    STICKREED = "stickreed",
+    GLOWSHROOM = "Glowshroom",
+    SALTY_ROOT = "saltroot"
+  }
 }
 
 const.crop_bot.cultivate = {

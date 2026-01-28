@@ -139,7 +139,7 @@ end
 ---------------------------- Planting Checks -----------------------------------
 
 function Crop_Bot:is_weed(scan_data)
-  return scan_data[const.crop_bot.PLANT_NAME] == const.crop_bot.PLANT_NAME_WEED
+  return scan_data[const.crop_bot.PLANT_NAME] == const.crop_bot.PLANT_NAMES.WEED
 end
 
 function Crop_Bot:is_weedy_growth(scan_data)
@@ -165,7 +165,7 @@ end
 
 function Crop_Bot:is_empty_crop(scan_data)
   local crop = self:is_crop(scan_data)
-  local is_empty = scan_data[const.crop_bot.PLANT_NAME] == const.crop_bot.PLANT_NAME_EMPTY
+  local is_empty = scan_data[const.crop_bot.PLANT_NAME] == const.crop_bot.PLANT_NAMES.EMPTY
 
   return crop and is_empty
 end
