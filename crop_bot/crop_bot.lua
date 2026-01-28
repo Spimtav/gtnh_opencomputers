@@ -209,13 +209,6 @@ function Crop_Bot:plant_stats(plant_data)
   return growth, gain, resist
 end
 
-function Crop_Bot:stat_diff(data_child, data_parent, stat_str)
-  local stat_child = data_child[stat_str]
-  local stat_parent = data_parent[stat_str]
-
-  return stat_child - stat_parent
-end
-
 ------------------------------ Serializers -------------------------------------
 
 function Crop_Bot:stat_str(scan_data)

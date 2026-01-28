@@ -4,6 +4,8 @@ Notes:
 - loaded after consts and common modules  but before [module].main()
 ]]
 
+local coord = require("coord")
+
 
 local env = {}
 

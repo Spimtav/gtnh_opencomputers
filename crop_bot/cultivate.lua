@@ -239,10 +239,15 @@ function Cultivate:max_resist()
 end
 
 function Cultivate:total_stat_improvement(data_child, data_parent)
-  local diff_growth = self.crop_bot:stat_diff(data_child, data_parent, const.crop_bot.PLANT_GROWTH)
-  local diff_gain = self.crop_bot:stat_diff(data_child, data_parent, const.crop_bot.PLANT_GAIN)
+  local growth_child, gain_child, resist_child = self.crop_bot:plant_stats(data_child)
+  local growth_parent, gain_parent, resist_parent = self.crop_bot:plant_stats(data_parent)
 
-  return diff_growth + diff_gain
+
+  local diff_growth = growth_child - growth_parent
+  local diff_gain = gain_child - gain_parent
+  local diff_resist = resist_parent - resist_child
+
+  return diff_growth + diff_gain + diff_resist
 end
 
 function Cultivate:child_regression(data_child, data_parent)
@@ -485,8 +490,8 @@ end
 
 
 function Cultivate:cultivate()
-  local length = env.crop_bot.PLOT_LENGTH
-  local width = env.crop_bot.PLOT_WIDTH
+  local length = env.cultivate.PLOT_LENGTH
+  local width = env.cultivate.PLOT_WIDTH
 
   self.data = self:new_data_table()
   self.loop_deltas = self:new_data_table()
