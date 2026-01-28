@@ -55,7 +55,7 @@ local Propagate = {}
 
 function Propagate:new()
   local new_prop = {
-    crop_bot = crop_bot:new(),
+    crop_bot = crop_bot:new(env.propagate.PLOT_LENGTH, env.propagate.PLOT_WIDTH),
 
     num_loops = 0,
     num_parents = 0,

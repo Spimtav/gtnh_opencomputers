@@ -10,6 +10,44 @@ local env = {}
 
 env.log_level = const.log_levels.WARNING
 
+env.patrol = {
+  RECHARGE_TIMEOUT = 5 -- seconds
+}
+
+env.crop_bot = {
+  GROWTH_THRESH_WEED = 24,
+
+  INV_SIZE = 16,
+  MIN_CROPS = 4,
+  CROP_STORAGE_SLOT = 2,
+
+  SLOT_BINDER = 1,
+  SLOT_CROPS = 2,
+
+  LOC_CROPS = {
+    POS = coord:new(0,0),
+    DIR = const.S
+  },
+  LOC_DISLOCATOR = {
+    POS = coord:new(0,4),
+    DIR = const.W
+  },
+  LOC_SWAP = {
+    POS = coord:new(0,5),
+    DIR = const.W
+  }
+}
+
+env.cultivate = {
+  PLOT_LENGTH = 7,
+  PLOT_WIDTH = 7,
+
+  SPECIES = const.crop_bot.PLANT_NAMES.SALTY_ROOT,
+  MAX_GROWTH = 20,
+  MAX_GAIN = 31,
+  MAX_RESIST = 0
+}
+
 env.propagate = {
   MODE = const.crop_bot.propagate.MODE_SEEDS,
   MAX_LOOPS_SEEDS = 500,
@@ -17,7 +55,7 @@ env.propagate = {
   PLOT_LENGTH = 7,
   PLOT_WIDTH = 7,
 
-  SPECIES = "saltroot",
+  SPECIES = const.crop_bot.PLANT_NAMES.SALTY_ROOT,
   MIN_GROWTH = 20,
   MIN_GAIN = 31,
   MAX_RESIST = 0

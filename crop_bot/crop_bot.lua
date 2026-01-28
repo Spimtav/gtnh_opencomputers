@@ -40,18 +40,22 @@ local patrol = require("patrol")
 local Crop_Bot = {}
 
 
-function Crop_Bot:new()
+function Crop_Bot:new(length, width)
   local new_bot = {
     patrol = patrol:new(),
+
+    plot_length = length,
+    plot_width = width,
+
     item_equipped = const.crop_bot.ITEM_SPADE,
     inv = {
-      [1] = const.crop_bot.ITEM_BINDER,
-      [2] = const.crop_bot.ITEM_CROP
+      [env.crop_bot.SLOT_BINDER] = const.crop_bot.ITEM_BINDER,
+      [env.crop_bot.SLOT_CROPS] = const.crop_bot.ITEM_CROP
     },
     items = {
       [const.crop_bot.ITEM_SPADE] = const.crop_bot.ITEM_EQUIPPED,
-      [const.crop_bot.ITEM_BINDER] = 1,
-      [const.crop_bot.ITEM_CROP] = 2
+      [const.crop_bot.ITEM_BINDER] = env.crop_bot.SLOT_BINDER,
+      [const.crop_bot.ITEM_CROP] = env.crop_bot.SLOT_CROPS
     }
   }
   setmetatable(new_bot, self)
@@ -78,7 +82,7 @@ function Crop_Bot:odd_pos()
 end
 
 function Crop_Bot:num_odds()
-  local area = const.crop_bot.PLOT_LENGTH * const.crop_bot.PLOT_WIDTH
+  local area = self.plot_length * self.plot_width
 
   return math.floor(area / 2)
 end
@@ -102,7 +106,7 @@ function Crop_Bot:equip(item)
 end
 
 function Crop_Bot:eject_all_misc()
-  for i=1,const.crop_bot.INV_SIZE do
+  for i=1,env.crop_bot.INV_SIZE do
     if self.inv[i] == nil then
       bot.select(i)
       bot.drop(const.STACK_MAX)
@@ -122,12 +126,12 @@ end
 function Crop_Bot:replenish_crops(should_return)
   local crop_size = self:crop_count()
 
-  self.patrol:travel_pos(const.crop_bot.LOC_CROPS.POS, true)
-  move.face_dir(const.crop_bot.LOC_CROPS.DIR)
+  self.patrol:travel_pos(env.crop_bot.LOC_CROPS.POS, true)
+  move.face_dir(env.crop_bot.LOC_CROPS.DIR)
 
   self:equip(const.crop_bot.ITEM_SPADE)
   bot.select(self.items[const.crop_bot.ITEM_CROP])
-  inv.suckFromSlot(sides.front, const.crop_bot.CROP_CHEST_SLOT, const.STACK_MAX - crop_size)
+  inv.suckFromSlot(sides.front, env.crop_bot.CROP_STORAGE_SLOT, const.STACK_MAX - crop_size)
   logging.print("Replenished crops", const.log_levels.DEBUG)
 
   if should_return then
@@ -145,7 +149,7 @@ end
 function Crop_Bot:is_weedy_growth(scan_data)
   local growth, _, _ = self:plant_stats(scan_data)
 
-  return (growth ~= nil) and (growth >= const.crop_bot.GROWTH_THRESH_WEED)
+  return (growth ~= nil) and (growth >= env.crop_bot.GROWTH_THRESH_WEED)
 end
 
 function Crop_Bot:is_weedy(scan_data)
@@ -243,7 +247,7 @@ end
 ---------------------------- Planting Actions ----------------------------------
 
 function Crop_Bot:add_crop()
-  if self:crop_count() <= const.crop_bot.MIN_CROPS then
+  if self:crop_count() <= env.crop_bot.MIN_CROPS then
     self:replenish_crops(true)
   end
 
@@ -271,16 +275,16 @@ function Crop_Bot:bind_plant()
 end
 
 function Crop_Bot:clean_bind_dislocator()
-  self.patrol:travel_pos(const.crop_bot.LOC_CROPS.POS, true)
-  move.face_dir(const.crop_bot.LOC_CROPS.DIR)
+  self.patrol:travel_pos(env.crop_bot.LOC_CROPS.POS, true)
+  move.face_dir(env.crop_bot.LOC_CROPS.DIR)
 
   self:equip(const.crop_bot.ITEM_BINDER)
   bot.use(nil, true)
   bot.use(nil, true)
   logging.print("Unbound the dislocator", const.log_levels.DEBUG)
 
-  self.patrol:travel_pos(const.crop_bot.LOC_DISLOCATOR.POS, true)
-  move.face_dir(const.crop_bot.LOC_DISLOCATOR.DIR)
+  self.patrol:travel_pos(env.crop_bot.LOC_DISLOCATOR.POS, true)
+  move.face_dir(env.crop_bot.LOC_DISLOCATOR.DIR)
   bot.use()
   logging.print("Bound dislocator", const.log_levels.DEBUG)
 
@@ -292,8 +296,8 @@ function Crop_Bot:swap_plant(binding_needed)
     self:bind_plant()
   end
 
-  self.patrol:travel_pos(const.crop_bot.LOC_DISLOCATOR.POS, true)
-  move.face_dir(const.crop_bot.LOC_DISLOCATOR.DIR)
+  self.patrol:travel_pos(env.crop_bot.LOC_DISLOCATOR.POS, true)
+  move.face_dir(env.crop_bot.LOC_DISLOCATOR.DIR)
 
   redstone.setOutput(sides.front, 1)
   redstone.setOutput(sides.front, 0)

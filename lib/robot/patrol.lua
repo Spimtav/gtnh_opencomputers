@@ -104,7 +104,7 @@ function Patrol:patrol(bot_func, bot_obj, patrol_length, patrol_width)
 
   self:travel_start()
 
-  os.sleep(const.crop_bot.RECHARGE_TIMEOUT)
+  os.sleep(env.patrol.RECHARGE_TIMEOUT)
 end
 
 

@@ -46,7 +46,7 @@ local Cultivate = {}
 
 function Cultivate:new()
   local new_cul = {
-    crop_bot = crop_bot:new(),
+    crop_bot = crop_bot:new(env.cultivate.PLOT_LENGTH, env.cultivate.PLOT_WIDTH),
 
     data_parents = {},
     growth = {},
@@ -259,9 +259,9 @@ end
 function Cultivate:plant_maxed(data)
   local growth, gain, resist = self.crop_bot:plant_stats(data)
 
-  local max_growth = const.crop_bot.cultivate.MAX_GROWTH
-  local max_gain = const.crop_bot.cultivate.MAX_GAIN
-  local max_resist = const.crop_bot.cultivate.MAX_RESIST
+  local max_growth = env.cultivate.MAX_GROWTH
+  local max_gain = env.cultivate.MAX_GAIN
+  local max_resist = env.cultivate.MAX_RESIST
 
   return (growth == max_growth) and (gain == max_gain) and (resist == max_resist)
 end
@@ -277,7 +277,7 @@ end
 ---------------------------------- Plant Logic ---------------------------------
 
 function Cultivate:valid_growth(growth)
-  local max_growth = const.crop_bot.cultivate.MAX_GROWTH
+  local max_growth = env.cultivate.MAX_GROWTH
   local min_growth = self:min_growth()
 
   if (growth > max_growth) or (growth < min_growth) then
@@ -289,7 +289,7 @@ function Cultivate:valid_growth(growth)
 end
 
 function Cultivate:valid_gain(gain)
-  local max_gain = const.crop_bot.cultivate.MAX_GAIN
+  local max_gain = env.cultivate.MAX_GAIN
   local min_gain = self:min_gain()
 
   if (gain > max_gain) or (gain < min_gain) then
@@ -321,7 +321,7 @@ function Cultivate:valid_child(data_child)
     return false, "not a plant"
   end
 
-  if not self.crop_bot:same_species(data_child, const.crop_bot.cultivate.SPECIES) then
+  if not self.crop_bot:same_species(data_child, env.cultivate.SPECIES) then
     self:increment_data(const.crop_bot.cultivate.DATA.CROSSES)
     return false, "wrong species"
   end
@@ -485,8 +485,8 @@ end
 
 
 function Cultivate:cultivate()
-  local length = const.crop_bot.PLOT_LENGTH
-  local width = const.crop_bot.PLOT_WIDTH
+  local length = env.crop_bot.PLOT_LENGTH
+  local width = env.crop_bot.PLOT_WIDTH
 
   self.data = self:new_data_table()
   self.loop_deltas = self:new_data_table()

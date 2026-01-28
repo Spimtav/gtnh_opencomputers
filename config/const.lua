@@ -50,30 +50,6 @@ const.MC_FACINGS = {
 }
 
 const.crop_bot = {
-
-  GROWTH_THRESH_WEED = 24
-  PLOT_LENGTH = 7,
-  PLOT_WIDTH = 7,
-
-  INV_SIZE = 16,
-  MIN_CROPS = 4,
-  CROP_CHEST_SLOT = 2,
-
-  RECHARGE_TIMEOUT = 5,
-
-  LOC_CROPS = {
-    POS = coord:new(0,0),
-    DIR = const.S
-  },
-  LOC_DISLOCATOR = {
-    POS = coord:new(0,4),
-    DIR = const.W
-  },
-  LOC_SWAP = {
-    POS = coord:new(0,5),
-    DIR = const.W
-  },
-
   ITEM_EQUIPPED = "equipped",
   ITEM_SPADE = "berriespp:itemSpade",
   ITEM_BINDER = "ThaumicTinkerer:connector",
@@ -103,11 +79,6 @@ const.crop_bot = {
 }
 
 const.crop_bot.cultivate = {
-  MAX_GROWTH = 20,
-  MAX_GAIN = 31,
-  MAX_RESIST = 0,
-  SPECIES = "stickreed",
-
   DATA = {
     SWAPS = "Sw",
     CROSSES = "Cr",
