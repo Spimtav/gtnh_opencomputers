@@ -104,9 +104,9 @@ function Propagate:increment_child_success_data(data_child, pos_str_child)
 
   local stat_str = self:full_stat_str(data_child)
 
-  local data_str = const.crop_bot.propagate.TARGETS
+  local data_str = const.crop_bot.propagate.DATA.TARGETS
   if self:child_improvement(data_child) then
-    data_str = const.crop_bot.propagate.BETTERS
+    data_str = const.crop_bot.propagate.DATA.BETTERS
   end
 
   if self.maxed_child_counts[stat_str] == nil then
@@ -169,7 +169,7 @@ function Propagate:print_data_screen()
   print("Plucks: "..self:data_str(const.crop_bot.propagate.DATA.PLUCKS).." "..pluck_stats)
 
   print("Child Counts:")
-  print(string.rep("_", 15))
+  print(string.rep("_", 20))
   for i=1,num_rows do
     local stat_key = sorted_child_stats[i]
     local stat_count = self.maxed_child_counts[stat_key]
@@ -188,7 +188,7 @@ function Propagate:invalid_reason_str(invalid_stat, target_stat)
 end
 
 function Propagate:full_stat_str(scan_data)
-  local growth, gain, resist = self.crop_bot:plant_stats(data_child)
+  local growth, gain, resist = self.crop_bot:plant_stats(scan_data)
 
   local str_growth = tostring(growth).."Gr"
   local str_gain = tostring(gain).."Ga"
@@ -264,10 +264,6 @@ function Propagate:valid_child(data_child)
   if self.crop_bot:is_weedy_growth(data_child) then
     self:increment_data(const.crop_bot.propagate.DATA.WEEDY_GROWTHS)
     return false, "weedy growth"
-  end
-
-  if self.num_loops == 1 then
-    return true, nil
   end
 
   local growth, gain, resist = self.crop_bot:plant_stats(data_child)
@@ -361,7 +357,7 @@ function Propagate:propagate()
   self.data = self:new_data_table()
   self.loop_deltas = self:new_data_table()
 
-  while not self:propagation_finished() do
+  while not self:propagation_complete() do
     self.num_loops = self.num_loops + 1
 
     -- No way to tail logs on OpenComputers, so this is a low-tech way to
