@@ -242,7 +242,6 @@ function Cultivate:total_stat_improvement(data_child, data_parent)
   local growth_child, gain_child, resist_child = self.crop_bot:plant_stats(data_child)
   local growth_parent, gain_parent, resist_parent = self.crop_bot:plant_stats(data_parent)
 
-
   local diff_growth = growth_child - growth_parent
   local diff_gain = gain_child - gain_parent
   local diff_resist = resist_parent - resist_child
