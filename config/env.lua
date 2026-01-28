@@ -54,8 +54,8 @@ env.propagate = {
   MODE = const.crop_bot.propagate.MODE_SEEDS,
   MAX_LOOPS_SEEDS = 500,
 
-  PLOT_LENGTH = 7,
-  PLOT_WIDTH = 7,
+  PLOT_LENGTH = 10,
+  PLOT_WIDTH = 10,
 
   SPECIES = const.crop_bot.PLANT_NAMES.SALTY_ROOT,
   MIN_GROWTH = 20,
