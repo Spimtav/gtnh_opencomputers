@@ -74,7 +74,8 @@ const.crop_bot = {
 
     STICKREED = "stickreed",
     GLOWSHROOM = "Glowshroom",
-    SALTY_ROOT = "saltroot"
+    SALTY_ROOT = "saltroot",
+    SUGAR_BEET = "Sugar Beet"
   }
 }
 

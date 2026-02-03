@@ -1,7 +1,7 @@
 # IC2 Crops Robot (Croppy)
 This dir contains various scripts for automating a robot to perform various procedures on IC2 crops:
 - `cultivate.lua`: breeds crops until they have the specified stats.
-- (TODO) `propagate.lua`: duplicates existing crops and preserves their stat levels.
+- `propagate.lua`: duplicates existing crops and preserves their stat levels.
 - (TODO) `crossbreed.lua`: breeds crops together to generate new types.
 
 ## Bot Config

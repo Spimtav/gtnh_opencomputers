@@ -13,7 +13,7 @@ local env = {}
 env.log_level = const.log_levels.WARNING
 
 env.patrol = {
-  RECHARGE_TIMEOUT = 5 -- seconds
+  RECHARGE_TIMEOUT = 8 -- seconds
 }
 
 env.crop_bot = {
