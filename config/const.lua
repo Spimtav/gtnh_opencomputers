@@ -75,7 +75,15 @@ const.crop_bot = {
     STICKREED = "stickreed",
     GLOWSHROOM = "Glowshroom",
     SALTY_ROOT = "saltroot",
-    SUGAR_BEET = "Sugar Beet"
+    SUGAR_BEET = "Sugar Beet",
+    LILLY_BLK = "Black Stonelilly",
+    LILLY_RED = "Red Stonelilly",
+    LILLY_YEL = "Yellow Stonelilly",
+    LILLY_GRY = "Gray Stonelilly",
+    LILLY_NTH = "Nether Stonelilly",
+    LILLY_WHI = "White Stonelilly",
+    BLAZEREED = "Blazereed",
+    TEARSTALKS = "Tearstalks"
   }
 }
 

@@ -44,7 +44,7 @@ env.cultivate = {
   PLOT_LENGTH = 7,
   PLOT_WIDTH = 7,
 
-  SPECIES = const.crop_bot.PLANT_NAMES.SALTY_ROOT,
+  SPECIES = const.crop_bot.PLANT_NAMES.LILLY_BLK,
   MAX_GROWTH = 20,
   MAX_GAIN = 31,
   MAX_RESIST = 0
@@ -52,12 +52,12 @@ env.cultivate = {
 
 env.propagate = {
   MODE = const.crop_bot.propagate.MODE_SEEDS,
-  MAX_LOOPS_SEEDS = 500,
+  MAX_LOOPS_SEEDS = 700,
 
   PLOT_LENGTH = 10,
   PLOT_WIDTH = 10,
 
-  SPECIES = const.crop_bot.PLANT_NAMES.SALTY_ROOT,
+  SPECIES = const.crop_bot.PLANT_NAMES.LILLY_BLK,
   MIN_GROWTH = 20,
   MIN_GAIN = 31,
   MAX_RESIST = 0
