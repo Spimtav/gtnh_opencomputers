@@ -4,6 +4,7 @@ Notes:
     - patrollable area is a solid rectangle
     - robot starts in bottom left corner of patrollable area
     - patrollable area is pointed towards true north
+    - charger faces bottom-left corner
 ]]
 
 
@@ -11,9 +12,11 @@ local Patrol = {}
 
 local os = require("os")
 local bot = require("robot")
-local move = require("move")
+local comp = require("computer")
 
+local move = require("move")
 local coord = require("coord")
+
 
 
 function Patrol:new()
@@ -26,6 +29,12 @@ function Patrol:new()
   self.__index = self
   return new_patrol
 end
+
+function Patrol:__tostring()
+  return "At: ("..self.pos_curr.x..", "..self.pos_curr.y..")"
+end
+
+------------------------------ Movement ----------------------------------------
 
 function Patrol:even_row(row)
   return (row % 2) == 0
@@ -84,9 +93,28 @@ function Patrol:travel_prev()
   logging.print("Returned to prev position: "..tostring(self.pos_curr), const.log_levels.DEBUG)
 end
 
-function Patrol:__tostring()
-  return "At: ("..self.pos_curr.x..", "..self.pos_curr.y..")"
+------------------------------- Energy -----------------------------------------
+
+function Patrol:is_low_energy()
+  local energy_curr = comp.energy()
+  local energy_max = comp.maxEnergy()
+  local energy_percent = (energy_curr / energy_max) * 100
+
+  return energy_percent <= env.patrol.ENERGY_MIN
 end
+
+function Patrol:recharge()
+  local pos_curr = self.pos_curr:clone()
+
+  self:travel_start()
+  os.sleep(env.patrol.ENERGY_SLEEP)
+
+  self:travel_pos(pos_curr, false)
+
+  logging.print("Recharged energy", const.log_levels.DEBUG)
+end
+
+-------------------------------- Main ------------------------------------------
 
 
 function Patrol:patrol(bot_func, bot_obj, patrol_length, patrol_width)
@@ -99,12 +127,16 @@ function Patrol:patrol(bot_func, bot_obj, patrol_length, patrol_width)
       self:travel_x(x, y)
 
       bot_func(bot_obj)
+
+      if self:is_low_energy() then
+        self:recharge()
+      end
     end
   end
 
   self:travel_start()
 
-  os.sleep(env.patrol.RECHARGE_TIMEOUT)
+  os.sleep(env.patrol.LOOP_SLEEP)
 end
 
 
