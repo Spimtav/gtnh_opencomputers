@@ -47,7 +47,7 @@ env.cultivate = {
   PLOT_LENGTH = 7,
   PLOT_WIDTH = 7,
 
-  SPECIES = const.crop_bot.PLANT_NAMES.LILLY_BLK,
+  SPECIES = const.crop_bot.PLANT_NAMES.GLOWFLOWER,
   MAX_GROWTH = 20,
   MAX_GAIN = 31,
   MAX_RESIST = 0
@@ -60,7 +60,7 @@ env.propagate = {
   PLOT_LENGTH = 10,
   PLOT_WIDTH = 10,
 
-  SPECIES = const.crop_bot.PLANT_NAMES.LILLY_BLK,
+  SPECIES = const.crop_bot.PLANT_NAMES.GLOWFLOWER,
   MIN_GROWTH = 20,
   MIN_GAIN = 31,
   MAX_RESIST = 0
