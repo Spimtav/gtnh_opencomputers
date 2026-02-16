@@ -84,7 +84,8 @@ const.crop_bot = {
     LILLY_NTH = "Nether Stonelilly",
     LILLY_WHI = "White Stonelilly",
     BLAZEREED = "Blazereed",
-    TEARSTALKS = "Tearstalks"
+    TEARSTALKS = "Tearstalks",
+    MILKWART = "Milkwart"
   }
 }
 
