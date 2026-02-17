@@ -85,7 +85,8 @@ const.crop_bot = {
     LILLY_WHI = "White Stonelilly",
     BLAZEREED = "Blazereed",
     TEARSTALKS = "Tearstalks",
-    MILKWART = "Milkwart"
+    MILKWART = "Milkwart",
+    WITHEREED = "Withereed"
   }
 }
 
