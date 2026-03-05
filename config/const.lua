@@ -87,7 +87,11 @@ const.crop_bot = {
     TEARSTALKS = "Tearstalks",
     MILKWART = "Milkwart",
     WITHEREED = "Withereed",
-    OILBERRIES = "Oilberries"
+    OILBERRIES = "Oilberries",
+    SPIDERNIP = "Spidernip",
+    COTTON = "Cotton",
+    CORIUM = "Corium",
+    EGGPLANT = "Eggplant"
   }
 }
 

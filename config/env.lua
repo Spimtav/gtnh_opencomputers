@@ -47,7 +47,7 @@ env.cultivate = {
   PLOT_LENGTH = 7,
   PLOT_WIDTH = 7,
 
-  SPECIES = const.crop_bot.OILBERRIES,
+  SPECIES = const.crop_bot.PLANT_NAMES.COTTON,
   MAX_GROWTH = 20,
   MAX_GAIN = 31,
   MAX_RESIST = 0
@@ -57,10 +57,10 @@ env.propagate = {
   MODE = const.crop_bot.propagate.MODE_SEEDS,
   MAX_LOOPS_SEEDS = 700,
 
-  PLOT_LENGTH = 10,
-  PLOT_WIDTH = 10,
+  PLOT_LENGTH = 8,
+  PLOT_WIDTH = 8,
 
-  SPECIES = const.crop_bot.PLANT_NAMES.OILBERRIES,
+  SPECIES = const.crop_bot.PLANT_NAMES.COTTON,
   MIN_GROWTH = 20,
   MIN_GAIN = 31,
   MAX_RESIST = 0
