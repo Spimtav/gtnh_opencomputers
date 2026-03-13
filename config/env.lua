@@ -47,7 +47,7 @@ env.cultivate = {
   PLOT_LENGTH = 7,
   PLOT_WIDTH = 7,
 
-  SPECIES = const.crop_bot.PLANT_NAMES.COTTON,
+  SPECIES = const.crop_bot.PLANT_NAMES.CORAL,
   MAX_GROWTH = 20,
   MAX_GAIN = 31,
   MAX_RESIST = 0
@@ -60,7 +60,7 @@ env.propagate = {
   PLOT_LENGTH = 8,
   PLOT_WIDTH = 8,
 
-  SPECIES = const.crop_bot.PLANT_NAMES.COTTON,
+  SPECIES = const.crop_bot.PLANT_NAMES.CORAL,
   MIN_GROWTH = 20,
   MIN_GAIN = 31,
   MAX_RESIST = 0

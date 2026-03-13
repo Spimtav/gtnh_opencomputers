@@ -91,7 +91,8 @@ const.crop_bot = {
     SPIDERNIP = "Spidernip",
     COTTON = "Cotton",
     CORIUM = "Corium",
-    EGGPLANT = "Eggplant"
+    EGGPLANT = "Eggplant",
+    CORAL = "Glowing Earth Coral"
   }
 }
 
