@@ -92,7 +92,8 @@ const.crop_bot = {
     COTTON = "Cotton",
     CORIUM = "Corium",
     EGGPLANT = "Eggplant",
-    CORAL = "Glowing Earth Coral"
+    CORAL = "Glowing Earth Coral",
+    CANOLA = "Rape" --Screw the name, but IC2's closed source so i can't fix it
   }
 }
 
